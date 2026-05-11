@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb small mb-0">
+    <li class="breadcrumb-item"><a href="{{ url_for('training_list') }}">Dziennik treningowy</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ session.title }}</li>
+  </ol>
+</nav>
+
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+  <div>
+    <h1 class="sa-page-title mb-1">{{ session.title }}</h1>
+    <p class="sa-page-sub mb-0">
+      <strong>{{ session.athlete.user_name }} {{ session.athlete.last_name }}</strong>
+      · {{ session.session_date.strftime('%d.%m.%Y') }}
+      {% if session.training_type %}· {{ session.training_type }}{% endif %}
+    </p>
+    {% if session.notes %}
+      <p class="mt-2 mb-0 small text-muted">{{ session.notes }}</p>
+    {% endif %}
+    <p class="small text-muted mt-2 mb-0">
+      Dodał: {{ session.creator.user_name }} {{ session.creator.last_name }}
+      {% if session.created_at %}· {{ session.created_at.strftime('%d.%m.%Y %H:%M') }}{% endif %}
+    </p>
+  </div>
+  <div class="d-flex flex-wrap gap-2">
+    {% if can_edit %}
+      <a href="{{ url_for('training_block_new', session_id=session.id_session) }}" class="btn sa-btn-primary btn-sm">
+        <i class="fa-solid fa-layer-group me-1"></i> Dodaj serię
+      </a>
+      <form method="POST" action="{{ url_for('training_session_delete', session_id=session.id_session) }}" class="d-inline" onsubmit="return confirm('Usunąć cały trening wraz z seriami?');">
+        <button type="submit" class="btn btn-outline-danger btn-sm">Usuń trening</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+{% if not blocks_with_reps %}
+  <div class="sa-card p-4 text-center text-muted">
+    <p class="mb-3">Brak serii — dodaj pierwszą (np. 8×50 m).</p>
+    {% if can_edit %}
+      <a href="{{ url_for('training_block_new', session_id=session.id_session) }}" class="btn sa-btn-primary">Dodaj serię</a>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% for item in blocks_with_reps %}
+  {% set b = item.block %}
+  {% set reps = item.reps %}
+  <div class="sa-card mb-4">
+    <div class="sa-card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <span><i class="fa-solid fa-stopwatch me-2"></i>{{ b.title }}</span>
+      {% if can_edit %}
+        <form method="POST" action="{{ url_for('training_block_delete', block_id=b.id_block) }}" class="mb-0" onsubmit="return confirm('Usunąć tę serię i wszystkie powtórzenia?');">
+          <button type="submit" class="btn btn-sm btn-outline-light border-0 text-white-50" style="text-decoration: underline">Usuń serię</button>
+        </form>
+      {% endif %}
+    </div>
+    <div class="p-3 border-bottom bg-light bg-opacity-50 small text-muted">
+      {% if b.distance_m %}<span class="me-3"><strong>Dystans:</strong> {{ b.distance_m }} m</span>{% endif %}
+      {% if b.planned_repetitions %}<span class="me-3"><strong>Powtórzenia:</strong> {{ b.planned_repetitions }}</span>{% endif %}
+      {% if b.notes %}<span><strong>Notatka:</strong> {{ b.notes }}</span>{% endif %}
+    </div>
+
+    {% if can_edit %}
+      <form method="POST" action="{{ url_for('training_save_reps', block_id=b.id_block) }}" class="table-responsive">
+        <table class="table table-sm align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 4rem">#</th>
+              <th>Czas <span class="fw-normal text-muted">(MM:SS.ss lub SS.ss)</span></th>
+              <th style="width: 6rem">HR</th>
+              <th style="width: 6rem">Laktat</th>
+              <th>Notatka</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rep in reps %}
+              <tr>
+                <td class="fw-bold text-primary">{{ rep.rep_index }}</td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    name="rep_{{ rep.id_rep }}_time"
+                    value="{{ rep.formatted_time or '' }}"
+                    placeholder="np. 0:35.20"
+                    autocomplete="off"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    name="rep_{{ rep.id_rep }}_hr"
+                    value="{{ rep.heart_rate or '' }}"
+                    min="40"
+                    max="230"
+                    placeholder="—"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    name="rep_{{ rep.id_rep }}_lactate"
+                    value="{{ rep.lactate_mmol if rep.lactate_mmol is not none else '' }}"
+                    placeholder="mmol/L"
+                    inputmode="decimal"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    name="rep_{{ rep.id_rep }}_note"
+                    value="{{ rep.note or '' }}"
+                    maxlength="255"
+                  />
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="p-3 border-top bg-white text-end">
+          <button type="submit" class="btn sa-btn-primary btn-sm"><i class="fa-solid fa-floppy-disk me-1"></i>Zapisz powtórzenia tej serii</button>
+        </div>
+      </form>
+    {% else %}
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Czas</th>
+              <th>HR</th>
+              <th>Laktat</th>
+              <th>Notatka</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rep in reps %}
+              <tr>
+                <td>{{ rep.rep_index }}</td>
+                <td class="sa-time">{{ rep.formatted_time or '—' }}</td>
+                <td>{{ rep.heart_rate or '—' }}</td>
+                <td>{{ rep.lactate_mmol if rep.lactate_mmol is not none else '—' }}</td>
+                <td class="small">{{ rep.note or '—' }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </div>
+{% endfor %}
+{% endblock %}

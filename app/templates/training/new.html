@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="mb-4">
+  <h1 class="sa-page-title mb-1">Nowy trening</h1>
+  <p class="sa-page-sub mb-0">Zapisz jednostkę dziennika dla zawodnika (trener wybiera zawodnika; zawodnik — tylko siebie).</p>
+</div>
+
+<div class="sa-card p-4" style="max-width: 640px">
+  <form method="POST">
+    {% if current_user.role.role_name in ['Trener', 'Admin'] %}
+      <div class="mb-3">
+        <label for="athlete_id" class="form-label fw-semibold">Zawodnik</label>
+        <select class="form-select" id="athlete_id" name="athlete_id" required>
+          <option value="" disabled selected>Wybierz zawodnika…</option>
+          {% for a in athletes %}
+            <option value="{{ a.id_user }}">{{ a.last_name }} {{ a.user_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <label for="session_date" class="form-label fw-semibold">Data treningu</label>
+      <input type="date" class="form-control" id="session_date" name="session_date" value="{{ today }}" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="title" class="form-label fw-semibold">Tytuł</label>
+      <input type="text" class="form-control" id="title" name="title" maxlength="200" placeholder="np. Beztlen — basen" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="training_type" class="form-label fw-semibold">Typ treningu <span class="text-muted fw-normal">(opcjonalnie)</span></label>
+      <input
+        type="text"
+        class="form-control"
+        id="training_type"
+        name="training_type"
+        maxlength="80"
+        placeholder="np. beztlen, tlen, sprint, technika"
+      />
+    </div>
+
+    <div class="mb-4">
+      <label for="notes" class="form-label fw-semibold">Notatki</label>
+      <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Założenia, obciążenie, samopoczucie…"></textarea>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn sa-btn-primary"><i class="fa-solid fa-check me-2"></i>Zapisz</button>
+      <a href="{{ url_for('training_list') }}" class="btn btn-outline-secondary">Anuluj</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

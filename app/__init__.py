@@ -66,3 +66,4 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 
 # Importowanie tras na końcu, aby uniknąć circular import
 from app import routes
+from app import training_routes  # noqa: F401 — rejestracja tras dziennika treningowego

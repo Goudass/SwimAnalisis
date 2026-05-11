@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app import db, login_manager, bcrypt
 from flask_login import UserMixin
 from sqlalchemy import Enum
@@ -101,3 +103,64 @@ class Result(db.Model):
         seconds = int(reaction_time_in_seconds)
         centiseconds = int((reaction_time_in_seconds - seconds) * 100)
         return f"{seconds:02}.{centiseconds:02}"
+
+
+class TrainingSession(db.Model):
+    """Jednostka dziennika: jeden trening jednego zawodnika w danym dniu."""
+
+    __tablename__ = "training_session"
+
+    id_session = db.Column(db.Integer, primary_key=True)
+    id_club = db.Column(db.Integer, db.ForeignKey("club.id_club"), nullable=False)
+    id_user = db.Column(db.Integer, db.ForeignKey("user.id_user"), nullable=False)
+    id_created_by = db.Column(db.Integer, db.ForeignKey("user.id_user"), nullable=False)
+    session_date = db.Column(db.Date, nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    training_type = db.Column(db.String(80), nullable=True)
+    notes = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    club = db.relationship("Club", backref=db.backref("training_sessions", lazy="dynamic"))
+    athlete = db.relationship(
+        "User",
+        foreign_keys=[id_user],
+        backref=db.backref("training_sessions_as_athlete", lazy="dynamic"),
+    )
+    creator = db.relationship(
+        "User",
+        foreign_keys=[id_created_by],
+        backref=db.backref("training_sessions_created", lazy="dynamic"),
+    )
+
+
+class TrainingBlock(db.Model):
+    """Seria w treningu (np. 8 × 50 m beztlen) — pod nią lista powtórzeń."""
+
+    __tablename__ = "training_block"
+
+    id_block = db.Column(db.Integer, primary_key=True)
+    id_session = db.Column(db.Integer, db.ForeignKey("training_session.id_session", ondelete="CASCADE"), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    distance_m = db.Column(db.Integer, nullable=True)
+    planned_repetitions = db.Column(db.Integer, nullable=True)
+    notes = db.Column(db.Text, nullable=True)
+
+    session = db.relationship("TrainingSession", backref=db.backref("blocks", lazy="dynamic", cascade="all, delete-orphan"))
+
+
+class TrainingRep(db.Model):
+    """Jedno powtórzenie: czas, HR, laktat (osobny wiersz na każde powtórzenie)."""
+
+    __tablename__ = "training_rep"
+    __table_args__ = (db.UniqueConstraint("id_block", "rep_index", name="uq_training_rep_block_index"),)
+
+    id_rep = db.Column(db.Integer, primary_key=True)
+    id_block = db.Column(db.Integer, db.ForeignKey("training_block.id_block", ondelete="CASCADE"), nullable=False)
+    rep_index = db.Column(db.Integer, nullable=False)
+    time_seconds = db.Column(db.Float, nullable=True)
+    formatted_time = db.Column(db.String(24), nullable=True)
+    heart_rate = db.Column(db.Integer, nullable=True)
+    lactate_mmol = db.Column(db.Float, nullable=True)
+    note = db.Column(db.String(255), nullable=True)
+
+    block = db.relationship("TrainingBlock", backref=db.backref("repetitions", lazy="dynamic", order_by="TrainingRep.rep_index"))

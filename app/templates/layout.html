@@ -77,6 +77,14 @@
             {% if current_user.role.role_name == "Admin" %}
               <li>
                 <a
+                  class="sa-nav-link {% if request.endpoint == 'training_list' or request.endpoint == 'training_new' or request.endpoint == 'training_session_detail' or request.endpoint == 'training_block_new' %}is-active{% endif %}"
+                  href="{{ url_for('training_list') }}"
+                >
+                  <i class="fa-solid fa-book"></i> Dziennik treningowy
+                </a>
+              </li>
+              <li>
+                <a
                   class="sa-nav-link {% if request.endpoint == 'manage_users' %}is-active{% endif %}"
                   href="{{ url_for('manage_users') }}"
                 >
@@ -110,6 +118,14 @@
             {% elif current_user.role.role_name == "Trener" %}
               <li>
                 <a
+                  class="sa-nav-link {% if request.endpoint == 'training_list' or request.endpoint == 'training_new' or request.endpoint == 'training_session_detail' or request.endpoint == 'training_block_new' %}is-active{% endif %}"
+                  href="{{ url_for('training_list') }}"
+                >
+                  <i class="fa-solid fa-book"></i> Dziennik treningowy
+                </a>
+              </li>
+              <li>
+                <a
                   class="sa-nav-link {% if request.endpoint == 'club_athletes' %}is-active{% endif %}"
                   href="{{ url_for('club_athletes', user_id=current_user.id_user) }}"
                 >
@@ -141,6 +157,14 @@
                 </a>
               </li>
             {% elif current_user.role.role_name == "Zawodnik" %}
+              <li>
+                <a
+                  class="sa-nav-link {% if request.endpoint == 'training_list' or request.endpoint == 'training_new' or request.endpoint == 'training_session_detail' or request.endpoint == 'training_block_new' %}is-active{% endif %}"
+                  href="{{ url_for('training_list') }}"
+                >
+                  <i class="fa-solid fa-book"></i> Dziennik treningowy
+                </a>
+              </li>
               <li>
                 <a
                   class="sa-nav-link {% if request.endpoint == 'personal_bests' %}is-active{% endif %}"

@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+  <div>
+    <h1 class="sa-page-title mb-1">Dziennik treningowy</h1>
+    <p class="sa-page-sub mb-0">Treningi w klubie — serie, czasy, tętno, laktat (powtórzenie = jeden wiersz).</p>
+  </div>
+  <a href="{{ url_for('training_new') }}" class="btn sa-btn-primary">
+    <i class="fa-solid fa-plus me-2"></i> Nowy trening
+  </a>
+</div>
+
+{% if sessions %}
+  <div class="sa-card">
+    <div class="table-responsive mb-0">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Zawodnik</th>
+            <th>Tytuł</th>
+            <th>Typ</th>
+            <th>Utworzył</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in sessions %}
+            <tr>
+              <td class="text-nowrap">{{ s.session_date.strftime('%d.%m.%Y') }}</td>
+              <td>{{ s.athlete.user_name }} {{ s.athlete.last_name }}</td>
+              <td class="fw-semibold">{{ s.title }}</td>
+              <td>{{ s.training_type or '—' }}</td>
+              <td class="small text-muted">{{ s.creator.user_name }} {{ s.creator.last_name }}</td>
+              <td class="text-end">
+                <a href="{{ url_for('training_session_detail', session_id=s.id_session) }}" class="btn btn-sm btn-outline-secondary">
+                  Otwórz
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% else %}
+  <div class="sa-card p-5 text-center text-muted">
+    <p class="mb-3">Brak zapisanych treningów.</p>
+    <a href="{{ url_for('training_new') }}" class="btn sa-btn-primary">Dodaj pierwszy trening</a>
+  </div>
+{% endif %}
+{% endblock %}
