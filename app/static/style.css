@@ -1,241 +1,481 @@
-/* ✅ Główne ustawienia */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+/* SwimAnalisis — motyw „pool / ocean” (inspiracja: czyste rankingi + nowoczesny UI) */
+
+:root {
+  --sa-ocean-900: #042f4a;
+  --sa-ocean-800: #0a4a6e;
+  --sa-ocean-700: #075985;
+  --sa-pool-500: #0ea5e9;
+  --sa-pool-400: #38bdf8;
+  --sa-aqua-300: #67e8f9;
+  --sa-surface: #f0f9ff;
+  --sa-surface-2: #e0f2fe;
+  --sa-card: #ffffff;
+  --sa-text: #0f172a;
+  --sa-text-muted: #64748b;
+  --sa-border: rgba(14, 165, 233, 0.18);
+  --sa-sidebar-w: 280px;
+  --sa-radius: 14px;
+  --sa-radius-sm: 10px;
+  --sa-shadow: 0 8px 30px rgba(7, 89, 133, 0.12);
+  --sa-shadow-sm: 0 2px 12px rgba(7, 89, 133, 0.08);
+  --sa-font: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
 }
 
-/* ✅ Styl bocznego paska nawigacji */
-.sidebar {
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: #343a40;
-    padding-top: 20px;
+/* ---------- Reset lekki ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-.sidebar h3 {
-    color: white;
-    text-align: center;
+html {
+  scroll-behavior: smooth;
 }
 
-.sidebar .nav-link {
-    color: white;
-    padding: 10px 15px;
-    display: block;
+/* ---------- Body / shell ---------- */
+body.sa-app {
+  margin: 0;
+  font-family: var(--sa-font);
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--sa-text);
+  background: linear-gradient(165deg, var(--sa-surface) 0%, #ffffff 38%, var(--sa-surface-2) 100%);
+  min-height: 100vh;
 }
 
-.sidebar .nav-link:hover {
-    background-color: #007bff;
-    border-radius: 5px;
+.sa-shell {
+  min-height: 100vh;
 }
 
-/* ✅ Ustawienie głównej zawartości */
-.main-content {
-    margin-left: 250px;
-    width: calc(100% - 250px);
-    min-height: 100vh;
+/* ---------- Sidebar ---------- */
+.sa-sidebar {
+  width: var(--sa-sidebar-w);
+  min-height: 100vh;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, var(--sa-ocean-900) 0%, var(--sa-ocean-800) 45%, var(--sa-ocean-700) 100%);
+  color: #e0f2fe;
+  padding: 1.35rem 1rem 2rem;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  box-shadow: 4px 0 32px rgba(4, 47, 74, 0.25);
+  z-index: 1020;
 }
 
-/* ✅ Pasek użytkownika */
-.navbar {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.sa-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0.5rem 1.25rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  text-decoration: none;
+  color: inherit;
 }
 
-.navbar-nav .nav-item .nav-link {
-    color: #333;
-    font-weight: bold;
+.sa-brand:hover {
+  color: #fff;
 }
 
-.navbar-nav .nav-item .nav-link:hover {
-    color: #007bff;
+.sa-brand-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--sa-pool-400), var(--sa-aqua-300));
+  display: grid;
+  place-items: center;
+  color: var(--sa-ocean-900);
+  font-size: 1.35rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
-.navbar .dropdown-menu {
-    width: 200px;
+.sa-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
 }
 
-/* Stylizacja tabeli */
+.sa-brand-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.sa-brand-tag {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.75;
+  font-weight: 600;
+}
+
+.sa-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sa-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--sa-radius-sm);
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.92rem;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+}
+
+.sa-nav-link i {
+  width: 1.25rem;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.sa-nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.sa-nav-link.is-active {
+  background: rgba(14, 165, 233, 0.28);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(103, 232, 249, 0.35);
+}
+
+.sa-nav-link--accent {
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.35), rgba(103, 232, 249, 0.15));
+  font-weight: 600;
+}
+
+.sa-nav-link--accent:hover {
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.5), rgba(103, 232, 249, 0.25));
+}
+
+/* ---------- Main column ---------- */
+.sa-main-wrap {
+  min-width: 0;
+}
+
+.sa-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1010;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1.25rem;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--sa-border);
+  box-shadow: var(--sa-shadow-sm);
+}
+
+.sa-topbar-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--sa-text-muted);
+  margin: 0;
+}
+
+.sa-main {
+  padding: 1.25rem 1.5rem 2.5rem;
+}
+
+@media (min-width: 1200px) {
+  .sa-main {
+    padding: 1.5rem 2rem 3rem;
+  }
+}
+
+.sa-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--sa-border);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+/* ---------- Przyciski ---------- */
+.btn.sa-btn-primary {
+  background: linear-gradient(135deg, var(--sa-pool-500), var(--sa-ocean-700));
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--sa-radius-sm);
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+}
+
+.btn.sa-btn-primary:hover {
+  background: linear-gradient(135deg, var(--sa-pool-400), var(--sa-pool-500));
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn.sa-btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(14, 165, 233, 0.45);
+  color: var(--sa-ocean-700);
+  font-weight: 600;
+  border-radius: var(--sa-radius-sm);
+}
+
+.btn.sa-btn-ghost:hover {
+  background: var(--sa-surface-2);
+  border-color: var(--sa-pool-500);
+  color: var(--sa-ocean-800);
+}
+
+/* ---------- Karty / dashboard ---------- */
+.sa-card {
+  background: var(--sa-card);
+  border-radius: var(--sa-radius);
+  border: 1px solid var(--sa-border);
+  box-shadow: var(--sa-shadow);
+  overflow: hidden;
+}
+
+.sa-card-header {
+  padding: 0.85rem 1.15rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  background: linear-gradient(90deg, var(--sa-ocean-800), var(--sa-pool-500));
+}
+
+.sa-card-header--muted {
+  background: linear-gradient(90deg, #475569, #64748b);
+}
+
+.sa-card-header--success {
+  background: linear-gradient(90deg, #047857, #10b981);
+}
+
+.sa-card-body {
+  padding: 0;
+}
+
+.sa-list-item {
+  padding: 0.75rem 1.15rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  font-size: 0.94rem;
+}
+
+.sa-list-item:last-child {
+  border-bottom: none;
+}
+
+.sa-time {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--sa-ocean-800);
+}
+
+/* ---------- Hero (strona główna gość) ---------- */
+.sa-hero {
+  position: relative;
+  border-radius: var(--sa-radius);
+  overflow: hidden;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  background-color: var(--sa-ocean-800);
+  background-image:
+    linear-gradient(115deg, rgba(4, 47, 74, 0.92) 0%, rgba(7, 89, 133, 0.75) 45%, rgba(14, 165, 233, 0.35) 100%),
+    url("images/background.png");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  box-shadow: var(--sa-shadow);
+}
+
+.sa-hero-inner {
+  max-width: 640px;
+  position: relative;
+  z-index: 1;
+}
+
+.sa-hero h1 {
+  font-weight: 800;
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.sa-hero .lead {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+}
+
+.sa-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.sa-feature {
+  background: var(--sa-card);
+  border-radius: var(--sa-radius-sm);
+  padding: 1.25rem;
+  border: 1px solid var(--sa-border);
+  box-shadow: var(--sa-shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sa-feature:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sa-shadow);
+}
+
+.sa-feature-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--sa-surface-2), #fff);
+  color: var(--sa-pool-500);
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.sa-feature h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  color: var(--sa-ocean-900);
+}
+
+.sa-feature p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--sa-text-muted);
+}
+
+/* ---------- Auth cards ---------- */
+.sa-auth-card {
+  max-width: 440px;
+  margin: 0 auto;
+  background: var(--sa-card);
+  border-radius: var(--sa-radius);
+  border: 1px solid var(--sa-border);
+  box-shadow: var(--sa-shadow);
+  padding: 2rem 2rem 1.75rem;
+}
+
+.sa-auth-card h2 {
+  font-weight: 800;
+  font-size: 1.45rem;
+  color: var(--sa-ocean-900);
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Tabele (spójnie z motywem) ---------- */
 .table {
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 10px;
-    overflow: hidden;
+  border-radius: var(--sa-radius-sm);
+  overflow: hidden;
+  box-shadow: var(--sa-shadow-sm);
 }
 
-.table thead {
-    background-color: #343a40;
-    /* Ciemne tło */
-    color: #ffffff;
-    /* Białe teksty */
+.table thead th {
+  background: linear-gradient(90deg, var(--sa-ocean-800), var(--sa-ocean-700));
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: none;
+  padding: 0.85rem 1rem;
 }
 
-.table tbody tr:nth-child(even) {
-    background-color: #f8f9fa;
-    /* Jasne rzędy */
-}
-
-.table tbody tr:nth-child(odd) {
-    background-color: #ffffff;
-    /* Białe rzędy */
+.table tbody td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
 }
 
 .table-hover tbody tr:hover {
-    background-color: #e9ecef;
-    /* Kolor podświetlenia */
+  background: rgba(14, 165, 233, 0.06);
 }
 
-.table th,
-.table td {
-    vertical-align: middle;
-    /* Wyśrodkowanie tekstu w komórkach */
+/* ---------- Formularze ---------- */
+.form-control,
+.form-select {
+  border-radius: var(--sa-radius-sm);
+  border-color: #cbd5e1;
 }
 
-.table th {
-    text-transform: uppercase;
-    /* Tekst w nagłówkach tabeli dużymi literami */
-    font-weight: 600;
-    /* Większa waga tekstu */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--sa-pool-500);
+  box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.2);
 }
 
-.table td {
-    font-size: 0.95rem;
-    font-weight: 500;
-    /* Wyróżnienie treści */
-}
-
-/* Zaokrąglone rogi i cienie */
-.table-bordered {
-    border: 1px solid #dee2e6;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    /* Miękki cień */
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-/* ✅ Nowoczesna typografia */
-body {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    color: #212529;
-}
-
-h1,
-h2,
-h3,
-h4 {
-    font-weight: 700;
-    color: #333;
-}
-
-h3 {
-    font-size: 1.8rem;
-}
-
-h4 {
-    font-size: 1.5rem;
-}
-
-/* ✅ Stylizacja tabel */
-.table {
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    background: #007bff;
-    color: white;
-}
-
-.table tbody tr:hover {
-    background: rgba(0, 123, 255, 0.1);
-}
-
-/* ✅ Stylizacja Sidebaru */
-.sidebar {
-    background-color: #343a40;
-    padding: 20px;
-    min-height: 100vh;
-    color: white;
-}
-
-.sidebar .nav-link {
-    font-weight: 500;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.sidebar .nav-link:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* ✅ Styl dla całej strony */
-body {
-    font-family: "Roboto", sans-serif;
-    background-color: #f8f9fa;
-}
-
-/* ✅ Sidebar */
-.sidebar {
-    width: 250px;
-    min-height: 100vh;
-}
-
-.sidebar h3 {
-    font-size: 1.5rem;
-}
-
-.sidebar-link {
-    display: block;
-    padding: 10px 15px;
-    border-radius: 8px;
-    transition: background 0.3s ease-in-out;
-}
-
-.sidebar-link:hover {
-    background: rgba(255, 255, 255, 0.2);
-    text-decoration: none;
-}
-
-/* ✅ Nawigacja użytkownika */
-.navbar {
-    padding: 10px 15px;
-}
-
-.navbar img {
-    border: 2px solid #ddd;
-}
-
-.navbar-nav .dropdown-menu {
-    min-width: 200px;
-}
-
-.navbar-nav .dropdown-item {
-    padding: 8px 15px;
-    transition: background 0.2s ease-in-out;
-}
-
-.navbar-nav .dropdown-item:hover {
-    background: #f0f0f0;
-}
-
-/* ✅ Główna zawartość */
-.main-content {
-    flex-grow: 1;
-    padding: 20px;
-}
-
-/* ✅ Styl dla komunikatów flash */
+/* ---------- Alerty ---------- */
 .alert {
-    font-size: 1rem;
-    border-radius: 8px;
+  border-radius: var(--sa-radius-sm);
+  border: none;
 }
 
-.alert-dismissible .btn-close {
-    top: 8px;
-    right: 10px;
+/* ---------- Dashboard welcome ---------- */
+.sa-page-title {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--sa-ocean-900);
+  font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+}
+
+.sa-page-sub {
+  color: var(--sa-text-muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- Avatar w topbarze ---------- */
+.sa-avatar {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border: 2px solid var(--sa-pool-400);
+  box-shadow: 0 2px 8px rgba(7, 89, 133, 0.2);
+}
+
+/* ---------- Responsywność ---------- */
+@media (max-width: 991.98px) {
+  .sa-shell {
+    flex-direction: column;
+  }
+
+  .sa-sidebar {
+    width: 100%;
+    min-height: auto;
+    position: relative;
+    box-shadow: 0 4px 24px rgba(4, 47, 74, 0.2);
+  }
+
+  .sa-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .sa-nav-link {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-width: 120px;
+    font-size: 0.82rem;
+    padding: 0.55rem 0.65rem;
+  }
 }

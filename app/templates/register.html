@@ -1,130 +1,91 @@
-{% extends "layout.html" %} {% block content %}
-<!-- Main Content -->
-<div class="container mt-5">
-  <h1 class="text-center mb-4">Rejestracja</h1>
+{% extends "layout.html" %}
+{% block content %}
+<div class="container py-5">
+  <div class="sa-auth-card">
+    <div class="text-center mb-4">
+      <div
+        class="d-inline-flex align-items-center justify-content-center rounded-3 mb-3"
+        style="width: 56px; height: 56px; background: linear-gradient(135deg, #e0f2fe, #bae6fd); color: #075985"
+      >
+        <i class="fa-solid fa-user-plus fa-lg"></i>
+      </div>
+      <h2 class="mb-1">Rejestracja</h2>
+      <p class="text-muted small mb-0">Dołącz do klubu — wypełnij dane poniżej.</p>
+    </div>
 
-  <!-- Flash messages -->
-  {% with messages = get_flashed_messages(with_categories=true) %} {% if
-  messages %}
-  <div class="alert alert-{{ messages[0][0] }} text-center">
-    {{ messages[0][1] }}
-  </div>
-  {% endif %} {% endwith %}
-
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <form method="POST" class="needs-validation" novalidate>
-        <div class="mb-3">
-          <label for="user_name" class="form-label">Imię</label>
-          <input
-            type="text"
-            class="form-control"
-            id="user_name"
-            name="user_name"
-            required
-          />
-          <div class="invalid-feedback">Proszę podać imię.</div>
+    <form method="POST" class="needs-validation" novalidate>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="user_name" class="form-label fw-semibold small">Imię</label>
+          <input type="text" class="form-control" id="user_name" name="user_name" required />
+          <div class="invalid-feedback">Podaj imię.</div>
         </div>
-
-        <div class="mb-3">
-          <label for="last_name" class="form-label">Nazwisko</label>
-          <input
-            type="text"
-            class="form-control"
-            id="last_name"
-            name="last_name"
-            required
-          />
-          <div class="invalid-feedback">Proszę podać nazwisko.</div>
+        <div class="col-md-6">
+          <label for="last_name" class="form-label fw-semibold small">Nazwisko</label>
+          <input type="text" class="form-control" id="last_name" name="last_name" required />
+          <div class="invalid-feedback">Podaj nazwisko.</div>
         </div>
-
-        <div class="mb-3">
-          <label for="gender" class="form-label">Płeć</label>
+        <div class="col-md-6">
+          <label for="gender" class="form-label fw-semibold small">Płeć</label>
           <select class="form-select" id="gender" name="gender" required>
-            <option value="">Wybierz...</option>
+            <option value="" selected disabled>Wybierz…</option>
             <option value="M">Mężczyzna</option>
             <option value="K">Kobieta</option>
           </select>
-          <div class="invalid-feedback">Proszę wybrać płeć.</div>
+          <div class="invalid-feedback">Wybierz płeć.</div>
         </div>
-
-        <div class="mb-3">
-          <label for="date_of_birth" class="form-label">Data urodzenia</label>
-          <input
-            type="date"
-            class="form-control"
-            id="date_of_birth"
-            name="date_of_birth"
-            required
-          />
-          <div class="invalid-feedback">Proszę podać datę urodzenia.</div>
+        <div class="col-md-6">
+          <label for="date_of_birth" class="form-label fw-semibold small">Data urodzenia</label>
+          <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required />
+          <div class="invalid-feedback">Podaj datę urodzenia.</div>
         </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">E-mail</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            required
-          />
-          <div class="invalid-feedback">
-            Proszę podać poprawny adres e-mail.
-          </div>
+        <div class="col-12">
+          <label for="email" class="form-label fw-semibold small">E-mail</label>
+          <input type="email" class="form-control" id="email" name="email" required />
+          <div class="invalid-feedback">Podaj poprawny e-mail.</div>
         </div>
-
-        <div class="mb-3">
-          <label for="password" class="form-label">Hasło</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            required
-          />
-          <div class="invalid-feedback">
-            Hasło musi mieć co najmniej 8 znaków, wielką literę i znak
-            specjalny.
-          </div>
+        <div class="col-12">
+          <label for="password" class="form-label fw-semibold small">Hasło</label>
+          <input type="password" class="form-control" id="password" name="password" required />
+          <div class="invalid-feedback">Hasło musi spełniać wymagania formularza.</div>
         </div>
-
-        <div class="mb-3">
-          <label for="role_id" class="form-label">Rola</label>
+        <div class="col-md-6">
+          <label for="role_id" class="form-label fw-semibold small">Rola</label>
           <select class="form-select" id="role_id" name="role_id" required>
-            <option value="">Wybierz rolę...</option>
-            <!-- Domyślna opcja -->
+            <option value="" selected disabled>Wybierz rolę…</option>
             {% for role in roles %}
-            <option value="{{ role.id_role }}">{{ role.role_name }}</option>
+              <option value="{{ role.id_role }}">{{ role.role_name }}</option>
             {% endfor %}
           </select>
-          <div class="invalid-feedback">Proszę wybrać rolę.</div>
+          <div class="invalid-feedback">Wybierz rolę.</div>
         </div>
-
-        <div class="mb-3">
-          <label for="club_id" class="form-label">Klub</label>
+        <div class="col-md-6">
+          <label for="club_id" class="form-label fw-semibold small">Klub</label>
           <select class="form-select" id="club_id" name="club_id" required>
-            <option value="">Wybierz klub...</option>
-            <!-- Domyślna opcja -->
+            <option value="" selected disabled>Wybierz klub…</option>
             {% for club in clubs %}
-            <option value="{{ club.id_club }}">{{ club.club_name }}</option>
+              <option value="{{ club.id_club }}">{{ club.club_name }}</option>
             {% endfor %}
           </select>
-          <div class="invalid-feedback">Proszę wybrać klub.</div>
+          <div class="invalid-feedback">Wybierz klub.</div>
         </div>
+      </div>
 
-        <button type="submit" class="btn btn-primary w-100">
-          Zarejestruj się
-        </button>
-      </form>
-    </div>
+      <button type="submit" class="btn sa-btn-primary w-100 py-2 mt-4">
+        <i class="fa-solid fa-check me-2"></i> Zarejestruj się
+      </button>
+    </form>
+
+    <p class="text-center text-muted small mt-3 mb-0">
+      Masz już konto?
+      <a href="{{ url_for('login') }}" class="fw-semibold text-decoration-none" style="color: var(--sa-ocean-700)">
+        Zaloguj się
+      </a>
+    </p>
   </div>
 </div>
 
-<!-- Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  // Bootstrap validation
   (function () {
     "use strict";
     var forms = document.querySelectorAll(".needs-validation");

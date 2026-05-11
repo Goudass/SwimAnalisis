@@ -37,7 +37,12 @@ def index():
                 .limit(5)
                 .all()
             )
-            return render_template("home.html", latest_results=latest_results, upcoming_competitions=upcoming_competitions)
+            return render_template(
+                "home.html",
+                latest_results=latest_results,
+                upcoming_competitions=upcoming_competitions,
+                title="Strona główna",
+            )
 
         elif current_user.role.role_name == "Zawodnik":
             # Pobranie ostatnich wyników użytkownika
@@ -49,10 +54,10 @@ def index():
                 .limit(5)
                 .all()
             )
-            return render_template("home.html", user_results=user_results)
+            return render_template("home.html", user_results=user_results, title="Strona główna")
 
     # Strona dla niezalogowanych użytkowników
-    return render_template("home.html")
+    return render_template("home.html", title="Strona główna")
 
 
 

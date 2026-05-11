@@ -1,111 +1,139 @@
-{% extends "layout.html" %} {% block content %}
-<div class="container mt-4">
-  <h1 class="text-center mb-4">Witamy w SwimAnalysis!🏊</h1>
-
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid px-0 px-lg-1" style="max-width: 1200px; margin: 0 auto">
   {% if current_user.is_authenticated %}
-  <!-- Sekcja dla zalogowanych użytkowników -->
-  <h3 class="mb-3">Twój panel</h3>
+    <div class="mb-4">
+      <h1 class="sa-page-title mb-1">Cześć, {{ current_user.user_name }}.</h1>
+      <p class="sa-page-sub mb-0">Poniżej skrót z Twojego konta — szybki start jak na tabeli startowej.</p>
+    </div>
 
-  {% if current_user.role.role_name == "Trener" %}
-  <!-- ✅ Panel dla Trenera -->
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          📊 Ostatnie wyniki zawodników
+    {% if current_user.role.role_name == "Trener" %}
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="sa-card h-100">
+            <div class="sa-card-header">
+              <i class="fa-solid fa-chart-line"></i> Ostatnie wyniki zawodników
+            </div>
+            <div class="sa-card-body">
+              {% for result in latest_results %}
+                <div class="sa-list-item d-flex justify-content-between align-items-start flex-wrap gap-2">
+                  <div>
+                    <span class="fw-semibold">{{ result.user.user_name }} {{ result.user.last_name }}</span>
+                    <span class="text-muted d-block small">{{ result.competition.competition_name }}</span>
+                  </div>
+                  <span class="sa-time">{{ result.formatted_time }}</span>
+                </div>
+              {% else %}
+                <div class="sa-list-item text-center text-muted">Brak wyników do wyświetlenia.</div>
+              {% endfor %}
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-          <ul class="list-group">
-            {% for result in latest_results %}
-            <li class="list-group-item">
-              {{ result.user.user_name }} {{ result.user.last_name }} -
-              <strong>{{ result.formatted_time }}</strong>
-              ({{ result.competition.competition_name }})
-            </li>
-            {% else %}
-            <li class="list-group-item text-center">
-              Brak wyników do wyświetlenia
-            </li>
-            {% endfor %}
-          </ul>
+        <div class="col-lg-6">
+          <div class="sa-card h-100">
+            <div class="sa-card-header sa-card-header--success">
+              <i class="fa-solid fa-flag-checkered"></i> Nadchodzące zawody
+            </div>
+            <div class="sa-card-body">
+              {% for competition in upcoming_competitions %}
+                <div class="sa-list-item d-flex justify-content-between align-items-center flex-wrap gap-2">
+                  <span class="fw-semibold">{{ competition.competition_name }}</span>
+                  <span class="badge rounded-pill text-bg-light border">
+                    {{ competition.competition_date.strftime('%d.%m.%Y') }}
+                  </span>
+                </div>
+              {% else %}
+                <div class="sa-list-item text-center text-muted">Brak zdefiniowanych zawodów w kolejce.</div>
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-header bg-success text-white">🏆 Zawody</div>
-        <div class="card-body">
-          <ul class="list-group">
-            {% for competition in upcoming_competitions %}
-            <li class="list-group-item">
-              <strong>{{ competition.competition_name }}</strong> - {{
-              competition.competition_date.strftime('%d-%m-%Y') }}
-            </li>
-            {% else %}
-            <li class="list-group-item text-center">
-              Brak nadchodzących zawodów
-            </li>
-            {% endfor %}
-          </ul>
+    {% elif current_user.role.role_name == "Zawodnik" %}
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="sa-card h-100">
+            <div class="sa-card-header">
+              <i class="fa-solid fa-stopwatch"></i> Twoje ostatnie starty
+            </div>
+            <div class="sa-card-body">
+              {% for result in user_results %}
+                <div class="sa-list-item d-flex justify-content-between align-items-start flex-wrap gap-2">
+                  <div>
+                    <span class="fw-semibold">{{ result.swimming_style.distance }} m</span>
+                    <span class="text-muted d-block small">{{ result.swimming_style.style_name }}</span>
+                    <span class="text-muted small">{{ result.competition.competition_name }}</span>
+                  </div>
+                  <span class="sa-time">{{ result.formatted_time }}</span>
+                </div>
+              {% else %}
+                <div class="sa-list-item text-center text-muted">Brak wyników — dodaj start z trenerem.</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="sa-card h-100">
+            <div class="sa-card-header sa-card-header--muted">
+              <i class="fa-solid fa-water"></i> Progresja (50 m dowolny)
+            </div>
+            <div class="p-3 text-center bg-light bg-opacity-50">
+              <img
+                src="{{ url_for('progression_image', user_id=current_user.id_user, style_id=1) }}"
+                class="img-fluid rounded-3 shadow-sm"
+                style="max-height: 280px"
+                alt="Wykres progresji"
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    {% else %}
+      <div class="sa-card p-4 text-center">
+        <p class="mb-2 fw-semibold">Panel administratora</p>
+        <p class="text-muted small mb-0">Użyj menu po lewej, aby zarządzać użytkownikami, klubami, zawodami i wynikami.</p>
+      </div>
+    {% endif %}
 
-  {% elif current_user.role.role_name == "Zawodnik" %}
-  <!-- ✅ Panel dla Zawodnika -->
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-header bg-info text-white">
-          📊 Twoje ostatnie wyniki
-        </div>
-        <div class="card-body">
-          <ul class="list-group">
-            {% for result in user_results %}
-            <li class="list-group-item">
-              {{ result.swimming_style.distance }}m -
-              <strong>{{ result.formatted_time }}</strong>
-              ({{ result.competition.competition_name }})
-            </li>
-            {% else %}
-            <li class="list-group-item text-center">
-              Brak wyników do wyświetlenia
-            </li>
-            {% endfor %}
-          </ul>
+  {% else %}
+    <section class="sa-hero">
+      <div class="sa-hero-inner">
+        <h1>Twój klub. Twoje czasy. Jedna aplikacja.</h1>
+        <p class="lead mb-0">
+          Zbieraj wyniki z zawodów, śledź progresję i porównuj starty — przejrzyście, bez chaosu w arkuszach.
+        </p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <a href="{{ url_for('login') }}" class="btn btn-light btn-lg fw-semibold px-4 shadow-sm">
+            <i class="fa-solid fa-right-to-bracket me-2"></i> Zaloguj się
+          </a>
+          <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg fw-semibold px-4">
+            Załóż konto
+          </a>
         </div>
       </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-header bg-warning text-white">📈 Twój progres</div>
-        <div class="card-body text-center">
-          <img
-            src="{{ url_for('progression_image', user_id=current_user.id_user, style_id=1) }}"
-            class="img-fluid shadow rounded"
-          />
-        </div>
+    </section>
+
+    <div class="sa-feature-grid mb-2">
+      <div class="sa-feature">
+        <div class="sa-feature-icon"><i class="fa-solid fa-ranking-star"></i></div>
+        <h3>Rankingi i rekordy</h3>
+        <p>Rekordy życiowe, dystanse i style — jak na profesjonalnych listach, ale pod Twój klub.</p>
+      </div>
+      <div class="sa-feature">
+        <div class="sa-feature-icon"><i class="fa-solid fa-chart-area"></i></div>
+        <h3>Analiza progresji</h3>
+        <p>Wykresy czasu i proste trendy — widać, czy forma idzie w dobrym kierunku.</p>
+      </div>
+      <div class="sa-feature">
+        <div class="sa-feature-icon"><i class="fa-solid fa-user-group"></i></div>
+        <h3>Trener i zespół</h3>
+        <p>Role dla admina, trenera i zawodnika — każdy widzi to, co potrzebuje.</p>
       </div>
     </div>
-  </div>
-  {% endif %} {% else %}
-  <!-- Sekcja dla niezalogowanych użytkowników -->
-  <p class="lead text-center">
-    SwimAnalysis to aplikacja do analizy wyników pływackich. Zaloguj się lub
-    zarejestruj, aby śledzić swoje wyniki i analizować progresję.
-  </p>
-  <div class="text-center">
-    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
-      Zaloguj się
-    </a>
-    <a
-      href="{{ url_for('register') }}"
-      class="btn btn-outline-secondary btn-lg"
-    >
-      Zarejestruj się
-    </a>
-  </div>
+
+    <p class="text-center text-muted small mb-0">
+      Inspirowane czytelnością rankingów — z myślą o polskich klubach i szkoleniach.
+    </p>
   {% endif %}
 </div>
 {% endblock %}
