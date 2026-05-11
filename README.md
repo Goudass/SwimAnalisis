@@ -81,15 +81,8 @@ requirements.txt
 
 ---
 
-## Co dobrego dopisać u siebie przed wysłaniem CV
-
-1. **2–3 zdania „ja”** — np. *„Projekt rozwijam samodzielnie; uczę się X; planuję Y.”*  
-2. **Screen** dashboardu lub wykresu (folder `docs/` + obrazek w README).  
-3. **Link do demo** — jeśli kiedyś wrzucisz na Render / Fly.io / VPS (nawet „work in progress”).  
-4. **Krótki „Roadmap”** — np. testy automatyczne, podział na blueprinty, PostgreSQL zamiast SQLite na produkcji — pokazuje myślenie produktowe/inżynierskie.
-
----
-
 ## Licencja
 
-_Private / do ustalenia — dopisz, jeśli upublicznisz repo._
+Projekt na licencji **MIT** — szczegóły w pliku [`LICENSE`](LICENSE).
+
+Możesz swobodnie używać, modyfikować i rozpowszechniać kod, pod warunkiem zachowania informacji o prawach autorskich i treści licencji MIT.
