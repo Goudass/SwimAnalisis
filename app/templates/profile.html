@@ -1,0 +1,94 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">
+    <i class="fas fa-user-circle"></i> Profil użytkownika: {{ user.user_name }}
+    {{ user.last_name }}
+  </h2>
+
+  <!-- Sekcja z danymi i zdjęciem -->
+  <div class="row align-items-center mb-4">
+    <div class="col-md-4 text-center">
+      <img
+        src="{{ url_for('static', filename='images/photo.jpg') }}"
+        alt="Zdjęcie użytkownika"
+        class="img-fluid rounded-circle shadow"
+        style="max-width: 200px"
+      />
+    </div>
+
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <i class="fas fa-info-circle"></i> Dane osobowe
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <strong><i class="fas fa-user"></i> Imię:</strong> {{
+              user.user_name }}
+            </li>
+            <li class="list-group-item">
+              <strong><i class="fas fa-user"></i> Nazwisko:</strong> {{
+              user.last_name }}
+            </li>
+            <li class="list-group-item">
+              <strong><i class="fas fa-venus-mars"></i> Płeć:</strong>
+              {{ "Mężczyzna" if user.gender == "M" else "Kobieta" }}
+            </li>
+            <li class="list-group-item">
+              <strong
+                ><i class="fas fa-birthday-cake"></i> Data urodzenia:</strong
+              >
+              {{ user.date_of_birth }}
+            </li>
+            <li class="list-group-item">
+              <strong><i class="fas fa-envelope"></i> E-mail:</strong> {{
+              user.email_address }}
+            </li>
+            <li class="list-group-item">
+              <strong><i class="fas fa-user-tag"></i> Rola:</strong> {{
+              user.role.role_name }}
+            </li>
+            <li class="list-group-item">
+              <strong><i class="fas fa-swimmer"></i> Klub:</strong> {{
+              user.club.club_name }}
+            </li>
+            <li class="list-group-item">
+              <strong
+                ><i class="fas fa-map-marker-alt"></i> Miejscowość
+                klubu:</strong
+              >
+              {{ user.club.club_city }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Przyciski dla TRENERA oglądającego profil zawodnika -->
+  {% if current_user.id_role == 2 and user.role.role_name == "Zawodnik" %}
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-5">
+      <a
+        href="{{ url_for('personal_bests', user_id=user.id_user) }}"
+        class="btn btn-lg btn-outline-primary w-100 shadow-sm"
+      >
+        <i class="fas fa-trophy"></i> Rekordy życiowe
+      </a>
+    </div>
+    <div class="col-md-5">
+      <a
+        href="{{ url_for('competitions', user_id=user.id_user) }}"
+        class="btn btn-lg btn-outline-success w-100 shadow-sm"
+      >
+        <i class="fas fa-calendar-alt"></i> Lista zawodów
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Sekcja dynamiczna -->
+  <div class="dynamic-content">{% block profile_content %} {% endblock %}</div>
+</div>
+{% endblock %}

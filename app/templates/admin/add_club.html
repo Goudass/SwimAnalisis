@@ -1,0 +1,30 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">Dodaj nowy klub</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="club_name" class="form-label">Nazwa klubu</label>
+      <input
+        type="text"
+        class="form-control"
+        id="club_name"
+        name="club_name"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="club_city" class="form-label">Miejscowość</label>
+      <input
+        type="text"
+        class="form-control"
+        id="club_city"
+        name="club_city"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Dodaj klub</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center"><i class="fas fa-user-friends"></i> Porównaj zawodników</h2>
+
+  <!-- Formularz wyboru dystansu, stylu i płci -->
+  <form method="POST" class="row g-3 mb-4 p-4 bg-light rounded shadow-sm">
+    <div class="col-md-4">
+      <label for="distance" class="form-label">Dystans</label>
+      <select name="distance" id="distance" class="form-select" required>
+        <option value="">-- Wybierz dystans --</option>
+        {% for distance in distances %}
+        <option value="{{ distance }}" {% if selected_distance == distance|string %}selected{% endif %}>
+          {{ distance }} m
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label for="style" class="form-label">Styl</label>
+      <select name="style" id="style" class="form-select" required>
+        <option value="">-- Wybierz styl --</option>
+        {% for style in styles %}
+        <option value="{{ style }}" {% if selected_style == style %}selected{% endif %}>
+          {{ style }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-4">
+      <label for="gender" class="form-label">Płeć</label>
+      <select name="gender" id="gender" class="form-select" required>
+        <option value="">-- Wybierz płeć --</option>
+        {% for gender in genders %}
+        <option value="{{ gender }}" {% if selected_gender == gender|string %}selected{% endif %}>
+          {{ "Mężczyzna" if gender == "M" else "Kobieta" }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-12 text-center">
+      <button type="submit" class="btn btn-primary">🔍 Wybierz zawodników</button>
+    </div>
+  </form>
+
+  <!-- Lista zawodników -->
+  {% if athletes %}
+  <form action="{{ url_for('compare_results') }}" method="POST" class="text-center">
+    <input type="hidden" name="distance" value="{{ selected_distance }}">
+    <input type="hidden" name="style" value="{{ selected_style }}">
+
+    <label class="form-label">Wybierz dwóch zawodników:</label>
+    <select name="athlete1" class="form-select d-inline-block w-25">
+      {% for athlete in athletes %}
+      <option value="{{ athlete.id_user }}">{{ athlete.user_name }} {{ athlete.last_name }}</option>
+      {% endfor %}
+    </select>
+
+    <select name="athlete2" class="form-select d-inline-block w-25">
+      {% for athlete in athletes %}
+      <option value="{{ athlete.id_user }}">{{ athlete.user_name }} {{ athlete.last_name }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="btn btn-success mt-3">📊 Porównaj</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

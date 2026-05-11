@@ -1,0 +1,47 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Lista użytkowników</h1>
+
+  <table class="table table-striped table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Rola</th>
+        <th>Klub</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>
+          <a href="{{ url_for('profile', user_id=user.id_user) }}">
+            {{ user.user_name }}
+          </a>
+        </td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.role.role_name }}</td>
+        <td>{{ user.club.club_name }}</td>
+        <td>
+          <a
+            href="{{ url_for('profile', user_id=user.id_user) }}"
+            class="btn btn-sm btn-primary"
+          >
+            Zobacz profil
+          </a>
+          {% if user.role.role_name == "Zawodnik" %}
+          <a
+            href="{{ url_for('results', user_id=user.id_user) }}"
+            class="btn btn-sm btn-secondary"
+          >
+            Wyniki
+          </a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

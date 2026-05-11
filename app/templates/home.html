@@ -1,0 +1,111 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Witamy w SwimAnalysis!🏊</h1>
+
+  {% if current_user.is_authenticated %}
+  <!-- Sekcja dla zalogowanych użytkowników -->
+  <h3 class="mb-3">Twój panel</h3>
+
+  {% if current_user.role.role_name == "Trener" %}
+  <!-- ✅ Panel dla Trenera -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          📊 Ostatnie wyniki zawodników
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            {% for result in latest_results %}
+            <li class="list-group-item">
+              {{ result.user.user_name }} {{ result.user.last_name }} -
+              <strong>{{ result.formatted_time }}</strong>
+              ({{ result.competition.competition_name }})
+            </li>
+            {% else %}
+            <li class="list-group-item text-center">
+              Brak wyników do wyświetlenia
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">🏆 Zawody</div>
+        <div class="card-body">
+          <ul class="list-group">
+            {% for competition in upcoming_competitions %}
+            <li class="list-group-item">
+              <strong>{{ competition.competition_name }}</strong> - {{
+              competition.competition_date.strftime('%d-%m-%Y') }}
+            </li>
+            {% else %}
+            <li class="list-group-item text-center">
+              Brak nadchodzących zawodów
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% elif current_user.role.role_name == "Zawodnik" %}
+  <!-- ✅ Panel dla Zawodnika -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+          📊 Twoje ostatnie wyniki
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            {% for result in user_results %}
+            <li class="list-group-item">
+              {{ result.swimming_style.distance }}m -
+              <strong>{{ result.formatted_time }}</strong>
+              ({{ result.competition.competition_name }})
+            </li>
+            {% else %}
+            <li class="list-group-item text-center">
+              Brak wyników do wyświetlenia
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-warning text-white">📈 Twój progres</div>
+        <div class="card-body text-center">
+          <img
+            src="{{ url_for('progression_image', user_id=current_user.id_user, style_id=1) }}"
+            class="img-fluid shadow rounded"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %} {% else %}
+  <!-- Sekcja dla niezalogowanych użytkowników -->
+  <p class="lead text-center">
+    SwimAnalysis to aplikacja do analizy wyników pływackich. Zaloguj się lub
+    zarejestruj, aby śledzić swoje wyniki i analizować progresję.
+  </p>
+  <div class="text-center">
+    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+      Zaloguj się
+    </a>
+    <a
+      href="{{ url_for('register') }}"
+      class="btn btn-outline-secondary btn-lg"
+    >
+      Zarejestruj się
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

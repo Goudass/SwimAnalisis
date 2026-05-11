@@ -1,0 +1,49 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">
+    <i class="fas fa-calendar-alt"></i> Lista zawodów klubu
+  </h2>
+
+  {% if competitions %}
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>Data</th>
+          <th>Nazwa zawodów</th>
+          <th>Miejscowość</th>
+          <th>Liczba zawodników</th>
+          <th>Akcja</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for competition, num_athletes in competitions %}
+        <tr>
+          <td>{{ competition.competition_date.strftime('%d-%m-%Y') }}</td>
+          <td>{{ competition.competition_name }}</td>
+          <td>{{ competition.competition_city }}</td>
+          <td>{{ num_athletes }}</td>
+          <td>
+            <a
+              href="{{ url_for('competition_details', competition_id=competition.id_competition) }}"
+              class="btn btn-info btn-sm"
+            >
+              🔍 Zobacz szczegóły
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-center text-danger mt-4">Brak zawodów dla klubu.</p>
+  {% endif %}
+
+  <div class="text-center mt-3">
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">
+      🔙 Powrót do strony głównej
+    </a>
+  </div>
+</div>
+{% endblock %}

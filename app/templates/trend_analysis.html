@@ -1,0 +1,31 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">
+    Analiza trendu dla dystansu {{ distance }} m {{ style_name }}
+  </h2>
+
+  <!-- Wykres -->
+  <div class="text-center mt-4">
+    <img
+      src="data:image/png;base64,{{ trend_plot }}"
+      alt="Wykres trendu"
+      class="img-fluid shadow"
+    />
+  </div>
+
+  <!-- Opis analizy -->
+  <div class="mt-4">
+    <p class="text-justify">{{ trend_description }}</p>
+  </div>
+
+  <!-- Powrót -->
+  <div class="text-center mt-4">
+    <a
+      href="{{ url_for('results_by_distance', user_id=athlete.id_user, style_id=style_id) }}"
+      class="btn btn-secondary"
+    >
+      Powrót
+    </a>
+  </div>
+</div>
+{% endblock %}

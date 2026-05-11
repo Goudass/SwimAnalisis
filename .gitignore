@@ -1,0 +1,36 @@
+# Środowiska
+.venv/
+venv/
+env/
+
+# Sekrety i lokalna konfiguracja
+.env
+.env.local
+
+# Baza i dane lokalne (schemat: migracje Alembic)
+*.db
+instance/
+
+# Certyfikaty / klucze
+certs/*.pem
+certs/*.key
+
+# Logi
+error.log*
+
+# Przesłane pliki (zostaw folder)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store

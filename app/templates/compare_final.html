@@ -1,0 +1,45 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">📊 Wyniki porównania</h2>
+
+  <table class="table table-bordered text-center">
+    <thead class="table-primary">
+      <tr>
+        <th>Zawodnik</th>
+        <th>Zawody</th>
+        <th>Data</th>
+        <th>Czas</th>
+        <th>Reakcja startowa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ result1.user.user_name }} {{ result1.user.last_name }}</td>
+        <td>{{ result1.competition.competition_name }}</td>
+        <td>{{ result1.competition.competition_date.strftime('%d-%m-%Y') }}</td>
+        <td><strong>{{ result1.formatted_time }}</strong></td>
+        <td>{{ result1.reaction_time|round(2) }} s</td>
+      </tr>
+      <tr>
+        <td>{{ result2.user.user_name }} {{ result2.user.last_name }}</td>
+        <td>{{ result2.competition.competition_name }}</td>
+        <td>{{ result2.competition.competition_date.strftime('%d-%m-%Y') }}</td>
+        <td><strong>{{ result2.formatted_time }}</strong></td>
+        <td>{{ result2.reaction_time|round(2) }} s</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 class="text-center mt-4">📈 Różnice</h4>
+  <p class="text-center">
+    ⏱️ Różnica czasu: <strong>{{ time_diff }} s</strong> <br />
+    🚀 Różnica reakcji startowej: <strong>{{ reaction_diff }} s</strong>
+  </p>
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('compare_athletes') }}" class="btn btn-secondary">
+      🔙 Wróć do porównania zawodników
+    </a>
+  </div>
+</div>
+{% endblock %}

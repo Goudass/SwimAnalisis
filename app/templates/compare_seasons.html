@@ -1,0 +1,149 @@
+{% extends "profile.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center"><i class="fas fa-chart-line"></i> Porównanie sezonów ({{ distance }} m {{ style_name }})</h2>
+
+  <!-- Wykres wszystkich sezonów -->
+  {% if all_seasons_plot %}
+  <div class="text-center mt-4">
+    <h4 class="text-primary"><i class="fas fa-chart-bar"></i> Wyniki wszystkich sezonów</h4>
+    <img
+      src="data:image/png;base64,{{ all_seasons_plot }}"
+      alt="Wykres wyników wszystkich sezonów"
+      class="img-fluid shadow rounded"
+    />
+  </div>
+  {% endif %}
+
+  <!-- Tabela wyników sezonami -->
+  {% if season_data %}
+  <div class="table-responsive mt-4">
+    <table class="table table-hover table-bordered shadow-sm">
+      <thead class="table-primary text-center">
+        <tr>
+          <th><i class="fas fa-calendar"></i> Rok</th>
+          <th><i class="fas fa-stopwatch"></i> Średni czas</th>
+          <th><i class="fas fa-trophy"></i> Najlepszy czas</th>
+          <th><i class="fas fa-running"></i> Liczba startów</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for season in season_data %}
+        <tr class="text-center">
+          <td><strong>{{ season.year }}</strong></td>
+          <td>{{ season.average_time }}</td> <!-- Wyświetlanie sformatowanego czasu -->
+          <td>{{ season.best_time }}</td> <!-- Wyświetlanie sformatowanego czasu -->
+          <td>{{ season.total_starts }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-center text-danger mt-4"><i class="fas fa-exclamation-circle"></i> Brak wyników do porównania.</p>
+  {% endif %}
+
+  <!-- Formularz wyboru sezonów do porównania -->
+  <div class="mt-5">
+    <h4 class="text-center"><i class="fas fa-exchange-alt"></i> Porównaj sezony</h4>
+    <form method="POST" class="row g-3 justify-content-center">
+      <!-- Wybór pierwszego sezonu -->
+      <div class="col-md-4">
+        <label for="year1" class="form-label"><i class="fas fa-calendar"></i> Wybierz pierwszy sezon</label>
+        <select name="year1" id="year1" class="form-select" onchange="filterYear2Options()">
+          <option value="">-- Wybierz rok --</option>
+          {% for season in season_data %}
+          <option value="{{ season.year }}" {% if year1 == season.year %}selected{% endif %}>
+            {{ season.year }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <!-- Wybór drugiego sezonu -->
+      <div class="col-md-4">
+        <label for="year2" class="form-label"><i class="fas fa-calendar"></i> Wybierz drugi sezon</label>
+        <select name="year2" id="year2" class="form-select">
+          <option value="">-- Wybierz rok --</option>
+          {% for season in season_data %}
+          <option value="{{ season.year }}" data-year="{{ season.year }}"
+            {% if year2 == season.year %}selected{% endif %}>
+            {{ season.year }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <!-- Przycisk porównania -->
+      <div class="col-md-2 align-self-end">
+        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-search"></i> Porównaj</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabela porównania sezonów -->
+  {% if compare_results %}
+  <div class="mt-5">
+    <h4 class="text-center"><i class="fas fa-balance-scale"></i> Wyniki porównania sezonów</h4>
+    <table class="table table-striped table-bordered shadow-sm">
+      <thead class="table-primary text-center">
+        <tr>
+          <th><i class="fas fa-chart-bar"></i> Wartość</th>
+          <th><i class="fas fa-calendar"></i> Sezon {{ compare_results.year1.year }}</th>
+          <th><i class="fas fa-calendar"></i> Sezon {{ compare_results.year2.year }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Średni czas</strong></td>
+          <td>{{ compare_results.year1.average_time if compare_results.year1.average_time else "Brak danych" }}</td>
+          <td>{{ compare_results.year2.average_time if compare_results.year2.average_time else "Brak danych" }}</td>
+        </tr>
+        <tr>
+          <td><strong>Najlepszy czas</strong></td>
+          <td>{{ compare_results.year1.best_time if compare_results.year1.best_time else "Brak danych" }}</td>
+          <td>{{ compare_results.year2.best_time if compare_results.year2.best_time else "Brak danych" }}</td>
+        </tr>
+        <tr>
+          <td><strong>Liczba startów</strong></td>
+          <td>{{ compare_results.year1.total_starts }}</td>
+          <td>{{ compare_results.year2.total_starts }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <!-- Wykres porównania sezonów -->
+  {% if compare_plot %}
+  <div class="text-center mt-4">
+    <h4><i class="fas fa-chart-line"></i> Wykres porównania sezonów</h4>
+    <img
+      src="data:image/png;base64,{{ compare_plot }}"
+      alt="Wykres porównania sezonów"
+      class="img-fluid shadow rounded"
+    />
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  function filterYear2Options() {
+    const year1 = document.getElementById("year1").value;
+    const year2Select = document.getElementById("year2");
+    const options = year2Select.options;
+
+    for (let i = 0; i < options.length; i++) {
+      const optionYear = options[i].getAttribute("data-year");
+      if (year1 && optionYear && parseInt(optionYear) <= parseInt(year1)) {
+        options[i].style.display = "none";
+      } else {
+        options[i].style.display = "";
+      }
+    }
+
+    if (year2Select.value && parseInt(year2Select.value) <= parseInt(year1)) {
+      year2Select.value = "";
+    }
+  }
+</script>
+{% endblock %}

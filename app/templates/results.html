@@ -1,0 +1,77 @@
+{% extends "layout.html" %} {% block content %}
+<div class="d-flex">
+  <!-- Sidebar -->
+  <nav class="bg-dark text-light p-3" style="width: 250px; min-height: 100vh">
+    <h4 class="text-center">Nawigacja</h4>
+    <ul class="nav flex-column">
+      {% if current_user.role.role_name == "Trener" %}
+      <li class="nav-item">
+        <a
+          class="nav-link text-light"
+          href="{{ url_for('club_athletes', user_id=current_user.id_user) }}"
+        >
+          Lista zawodników
+        </a>
+      </li>
+      {% endif %} {% if current_user.role.role_name == "Zawodnik" %}
+      <li class="nav-item">
+        <a
+          class="nav-link text-light"
+          href="{{ url_for('personal_bests', user_id=current_user.id_user) }}"
+        >
+          Rekordy życiowe
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link text-light"
+          href="{{ url_for('competitions', user_id=current_user.id_user) }}"
+        >
+          Zawody
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mt-5">
+    <h1 class="text-center">Wyniki zawodnika</h1>
+    <h2 class="text-center mb-4">{{ user.user_name }} {{ user.last_name }}</h2>
+
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>Zawody</th>
+            <th>Miasto</th>
+            <th>Czas</th>
+            <th>Czas reakcji</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in results %}
+          <tr>
+            <td>{{ result.competition.competition_name }}</td>
+            <td>{{ result.competition.competition_city }}</td>
+            <td><strong>{{ result.formatted_time }}</strong></td>
+            <!-- ✅ Poprawiony format czasu -->
+            <td>{{ result.reaction_time|round(2) }} s</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Powrót -->
+    <div class="text-center mt-4">
+      <a
+        href="{{ url_for('profile', user_id=user.id_user) }}"
+        class="btn btn-secondary"
+      >
+        Powrót do profilu
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

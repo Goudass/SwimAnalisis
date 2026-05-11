@@ -1,0 +1,85 @@
+{% extends "profile.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">
+    <i class="fas fa-chart-line"></i> Narzędzia analityczne dla zawodnika:
+    <span class="text-primary">{{ athlete.user_name }} {{ athlete.last_name }}</span>
+  </h2>
+
+  <!-- Formularz wyboru dystansu, stylu i roku -->
+  <form method="POST" class="row g-3 mb-4 p-3 bg-light rounded shadow-sm">
+    <div class="col-md-4">
+      <label for="distance" class="form-label"><i class="fas fa-ruler"></i> Wybierz dystans:</label>
+      <select name="distance" id="distance" class="form-select">
+        <option value="">-- Wybierz dystans --</option>
+        {% for distance in distances %}
+        <option value="{{ distance }}" {% if selected_distance == distance %}selected{% endif %}>
+          {{ distance }} m
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="style" class="form-label"><i class="fas fa-swimmer"></i> Wybierz styl:</label>
+      <select name="style" id="style" class="form-select">
+        <option value="">-- Wybierz styl --</option>
+        {% for style in styles %}
+        <option value="{{ style }}" {% if selected_style == style %}selected{% endif %}>
+          {{ style }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label for="year" class="form-label"><i class="fas fa-calendar"></i> Wybierz rok (opcjonalnie):</label>
+      <input
+        type="number"
+        name="year"
+        id="year"
+        class="form-control"
+        placeholder="Np. 2023"
+        value="{{ selected_year }}"
+      />
+    </div>
+    <div class="col-12 text-center">
+      <button type="submit" class="btn btn-primary"><i class="fas fa-chart-bar"></i> Pokaż statystyki</button>
+    </div>
+  </form>
+
+  <!-- Wyświetlanie wyników -->
+  {% if stats %}
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white"><i class="fas fa-chart-pie"></i> Statystyki analityczne</div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <strong><i class="fas fa-stopwatch"></i> Średni czas:</strong>
+          <span class="badge bg-success fs-5">{{ stats.average_time }}</span> <!-- ✅ formatted_time -->
+        </li>
+        <li class="list-group-item">
+          <strong><i class="fas fa-trophy"></i> Rekord życiowy:</strong>
+          <span class="badge bg-warning text-dark fs-5">{{ stats.best_time }}</span> <!-- ✅ formatted_time -->
+        </li>
+        <li class="list-group-item">
+          <strong><i class="fas fa-chart-line"></i> Liczba startów:</strong>
+          <span class="badge bg-info fs-5">{{ stats.total_starts }}</span>
+        </li>
+        {% if selected_year %}
+        <li class="list-group-item">
+          <strong><i class="fas fa-calendar-alt"></i> Najlepszy czas w roku {{ selected_year }}:</strong>
+          <span class="badge bg-primary fs-5">{{ stats.best_year_time }}</span> <!-- ✅ formatted_time -->
+        </li>
+        <li class="list-group-item">
+          <strong><i class="fas fa-running"></i> Liczba startów w roku {{ selected_year }}:</strong>
+          <span class="badge bg-secondary fs-5">{{ stats.year_starts }}</span>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+  {% elif selected_distance or selected_style or selected_year %}
+  <p class="text-danger text-center mt-4"><i class="fas fa-exclamation-triangle"></i> Brak wyników dla wybranych filtrów.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">Dodaj nowe zawody</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="competition_name" class="form-label">Nazwa zawodów</label>
+      <input
+        type="text"
+        class="form-control"
+        id="competition_name"
+        name="competition_name"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="competition_city" class="form-label">Miejscowość</label>
+      <input
+        type="text"
+        class="form-control"
+        id="competition_city"
+        name="competition_city"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="competition_date" class="form-label">Data zawodów</label>
+      <input
+        type="date"
+        class="form-control"
+        id="competition_date"
+        name="competition_date"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Dodaj zawody</button>
+  </form>
+</div>
+{% endblock %}

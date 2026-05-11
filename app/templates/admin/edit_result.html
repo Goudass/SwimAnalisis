@@ -1,0 +1,38 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Edytuj wynik</h2>
+
+  <form method="POST">
+    <div class="mb-3">
+      <label for="distance_time" class="form-label">Czas (w sekundach)</label>
+      <input
+        type="number"
+        step="0.01"
+        class="form-control"
+        id="distance_time"
+        name="distance_time"
+        value="{{ result.distance_time }}"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="formatted_time" class="form-label"
+        >Czas sformatowany (MM:SS.ss)</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="formatted_time"
+        name="formatted_time"
+        value="{{ result.formatted_time }}"
+        disabled
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+      Zaktualizuj wynik
+    </button>
+  </form>
+</div>
+{% endblock %}

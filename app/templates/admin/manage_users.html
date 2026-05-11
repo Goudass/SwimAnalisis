@@ -1,0 +1,49 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">
+    <i class="fas fa-users"></i> Zarządzaj zawodnikami
+  </h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover shadow-sm">
+      <thead class="table-primary text-center">
+        <tr>
+          <th><i class="fas fa-user"></i> Imię i Nazwisko</th>
+          <th><i class="fas fa-envelope"></i> E-mail</th>
+          <th><i class="fas fa-pen"></i> Edytuj</th>
+          <th><i class="fas fa-trash"></i> Usuń</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr class="text-center">
+          <td>{{ user.user_name }} {{ user.last_name }}</td>
+          <td>{{ user.email_address }}</td>
+          <td>
+            <a
+              href="{{ url_for('edit_user', user_id=user.id_user) }}"
+              class="btn btn-warning btn-sm"
+              ><i class="fas fa-edit"></i> Edytuj</a
+            >
+          </td>
+          <td>
+            <a
+              href="{{ url_for('delete_user', user_id=user.id_user) }}"
+              class="btn btn-danger btn-sm"
+              ><i class="fas fa-trash"></i> Usuń</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Przyciski -->
+  <div class="text-center mt-4">
+    <a href="{{ url_for('add_user') }}" class="btn btn-primary"
+      ><i class="fas fa-plus"></i> Dodaj nowego zawodnika</a
+    >
+  </div>
+</div>
+{% endblock %}

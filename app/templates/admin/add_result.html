@@ -1,0 +1,62 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">Dodaj nowy wynik</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label for="user_id" class="form-label">Zawodnik</label>
+      <select class="form-select" id="user_id" name="user_id" required>
+        {% for user in users %}
+        <option value="{{ user.id_user }}">
+          {{ user.user_name }} {{ user.last_name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="competition_id" class="form-label">Zawody</label>
+      <select
+        class="form-select"
+        id="competition_id"
+        name="competition_id"
+        required
+      >
+        {% for competition in competitions %}
+        <option value="{{ competition.id_competition }}">
+          {{ competition.competition_name }} ({{ competition.competition_city
+          }})
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="distance_time" class="form-label">Czas (w sekundach)</label>
+      <input
+        type="number"
+        step="0.01"
+        class="form-control"
+        id="distance_time"
+        name="distance_time"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="reaction_time" class="form-label"
+        >Czas reakcji (w sekundach)</label
+      >
+      <input
+        type="number"
+        step="0.01"
+        class="form-control"
+        id="reaction_time"
+        name="reaction_time"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Dodaj wynik</button>
+  </form>
+</div>
+{% endblock %}

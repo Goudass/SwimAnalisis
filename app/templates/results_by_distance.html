@@ -1,0 +1,72 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Wyniki dla dystansu</h2>
+
+  {% if results %}
+  <!-- Tabela wyników -->
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Czas</th>
+          <th>Czas reakcji</th>
+          <th>Data</th>
+          <th>Nazwa zawodów</th>
+          <th>Miejscowość</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for idx, result in enumerate(results, start=1) %}
+        <tr>
+          <td>{{ idx }}</td>
+          <td><strong>{{ result.formatted_time }}</strong></td>
+          <!-- ✅ Poprawiony format czasu -->
+          <td>{{ result.reaction_time|round(2) }}</td>
+          <td>
+            {{ result.competition.competition_date.strftime('%d-%m-%Y') }}
+          </td>
+          <td>{{ result.competition.competition_name }}</td>
+          <td>{{ result.competition.competition_city }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Przycisk do dodatkowych analiz -->
+  <div class="d-flex justify-content-center flex-wrap mt-4">
+    {% if current_user.id_role == 2 %}
+    <!-- ✅ TRENER widzi wszystkie analizy -->
+    <a
+      href="{{ url_for('descriptive_statistics_for_distance', trainer_id=current_user.id_user, athlete_id=user.id_user, distance=results[0].swimming_style.distance) }}"
+      class="btn btn-outline-secondary btn-lg me-3 mb-2"
+    >
+      📊 Statystyka opisowa
+    </a>
+    {% endif %}
+
+    <!-- ✅ Każdy (trener i zawodnik) widzi "Analiza trendu" -->
+    <a
+      href="{{ url_for('trend_analysis_for_distance', trainer_id=current_user.id_user, athlete_id=user.id_user, distance=results[0].swimming_style.distance) }}"
+      class="btn btn-outline-secondary btn-lg me-3 mb-2"
+    >
+      📈 Analiza trendu
+    </a>
+
+    {% if current_user.id_role == 2 %}
+    <!-- ✅ TRENER widzi "Porównaj sezonami" -->
+    <a
+      href="{{ url_for('compare_seasons_for_distance', trainer_id=current_user.id_user, athlete_id=user.id_user, distance=results[0].swimming_style.distance) }}"
+      class="btn btn-primary btn-lg mb-2"
+    >
+      🔄 Porównaj sezonami
+    </a>
+    {% endif %}
+  </div>
+
+  {% else %}
+  <p class="text-center text-danger mt-4">Brak wyników dla tego dystansu.</p>
+  {% endif %}
+</div>
+{% endblock %}

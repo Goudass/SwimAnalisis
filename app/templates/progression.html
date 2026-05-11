@@ -1,0 +1,38 @@
+{% extends "profile.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">📊 Progresja wyników</h2>
+
+  <!-- Wykres wyników -->
+  <div class="text-center mb-4">
+    <div class="card shadow">
+      <div class="card-body">
+        <img
+          src="{{ image_url }}"
+          alt="Wykres progresji wyników"
+          class="img-fluid rounded border"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Analiza wyników -->
+  <div class="card shadow mt-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">📈 Analiza wyników</h5>
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ analysis }}</p>
+    </div>
+  </div>
+
+  <!-- Przycisk powrotu -->
+  <div class="text-center mt-4">
+    <a
+      href="{{ url_for('results_by_distance', user_id=user.id_user, style_id=1) }}"
+      class="btn btn-outline-primary btn-lg"
+    >
+      🔙 Wróć do wyników
+    </a>
+  </div>
+</div>
+{% endblock %}

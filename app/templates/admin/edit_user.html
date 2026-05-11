@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">Edytuj użytkownika: {{ user.user_name }} {{ user.last_name }}</h2>
+
+    <form method="POST">
+      <div class="mb-3">
+        <label for="user_name" class="form-label">Imię</label>
+        <input type="text" class="form-control" id="user_name" name="user_name" value="{{ user.user_name }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="last_name" class="form-label">Nazwisko</label>
+        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{ user.email_address }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="gender" class="form-label">Płeć</label>
+        <select class="form-select" id="gender" name="gender" required>
+          <option value="M" {% if user.gender == 'M' %}selected{% endif %}>Mężczyzna</option>
+          <option value="K" {% if user.gender == 'K' %}selected{% endif %}>Kobieta</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="date_of_birth" class="form-label">Data urodzenia</label>
+        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ user.date_of_birth }}" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Zaktualizuj dane</button>
+    </form>
+  </div>
+{% endblock %}

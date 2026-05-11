@@ -1,0 +1,48 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">
+    <i class="fas fa-building"></i> Zarządzaj klubami
+  </h2>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover shadow-sm">
+      <thead class="table-primary text-center">
+        <tr>
+          <th><i class="fas fa-building"></i> Nazwa klubu</th>
+          <th><i class="fas fa-map-marker-alt"></i> Miejscowość</th>
+          <th><i class="fas fa-pen"></i> Edytuj</th>
+          <th><i class="fas fa-trash"></i> Usuń</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for club in clubs %}
+        <tr class="text-center">
+          <td>{{ club.club_name }}</td>
+          <td>{{ club.club_city }}</td>
+          <td>
+            <a
+              href="{{ url_for('edit_club', club_id=club.id_club) }}"
+              class="btn btn-warning btn-sm"
+              ><i class="fas fa-edit"></i> Edytuj</a
+            >
+          </td>
+          <td>
+            <a
+              href="{{ url_for('delete_club', club_id=club.id_club) }}"
+              class="btn btn-danger btn-sm"
+              ><i class="fas fa-trash"></i> Usuń</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('add_club') }}" class="btn btn-primary"
+      ><i class="fas fa-plus"></i> Dodaj nowy klub</a
+    >
+  </div>
+</div>
+{% endblock %}

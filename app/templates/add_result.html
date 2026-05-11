@@ -1,0 +1,159 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center">➕ Dodaj wynik</h2>
+
+  <form method="POST" class="mt-4" onsubmit="return validateTimeFormat()">
+    <div class="mb-3">
+      <label for="athlete_id" class="form-label">Zawodnik</label>
+      <select name="athlete_id" id="athlete_id" class="form-select" required>
+        <option value="">-- Wybierz zawodnika --</option>
+        {% for athlete in athletes %}
+        <option value="{{ athlete.id_user }}">
+          {{ athlete.user_name }} {{ athlete.last_name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- ✅ Wybór istniejących zawodów -->
+    <div class="mb-3">
+      <label for="competition_id" class="form-label">Wybierz zawody</label>
+      <select
+        name="competition_id"
+        id="competition_id"
+        class="form-select"
+        onchange="toggleNewCompetitionFields()"
+        required
+      >
+        <option value="">-- Wybierz zawody z listy --</option>
+        {% for competition in competitions %}
+        <option value="{{ competition.id_competition }}">
+          {{ competition.competition_name }} - {{
+          competition.competition_date.strftime('%d-%m-%Y') }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <hr />
+    <h5 class="text-center">Lub dodaj nowe zawody:</h5>
+
+    <!-- ✅ Pola dla nowych zawodów (ukrywane jeśli wybierzemy zawody z listy) -->
+    <div id="new_competition_fields">
+      <div class="mb-3">
+        <label for="new_competition_name" class="form-label"
+          >Nazwa zawodów</label
+        >
+        <input
+          type="text"
+          name="new_competition_name"
+          id="new_competition_name"
+          class="form-control"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="new_competition_city" class="form-label">Miejscowość</label>
+        <input
+          type="text"
+          name="new_competition_city"
+          id="new_competition_city"
+          class="form-control"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="new_competition_date" class="form-label"
+          >Data zawodów</label
+        >
+        <input
+          type="date"
+          name="new_competition_date"
+          id="new_competition_date"
+          class="form-control"
+        />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="style_id" class="form-label">Styl pływacki</label>
+      <select name="style_id" id="style_id" class="form-select" required>
+        <option value="">-- Wybierz styl --</option>
+        {% for style in styles %}
+        <option value="{{ style.id_style }}">
+          {{ style.style_name }} ({{ style.distance }}m)
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="time" class="form-label">Czas (MM:SS.SS lub SS.SS)</label>
+      <input
+        type="text"
+        name="time"
+        id="time"
+        class="form-control"
+        placeholder="np. 00:45.67"
+        required
+      />
+      <small class="text-muted"
+        >Format: MM:SS.SS (np. 01:15.23) lub SS.SS (np. 45.67)</small
+      >
+    </div>
+
+    <div class="mb-3">
+      <label for="reaction_time" class="form-label">Czas reakcji (SS.SS)</label>
+      <input
+        type="text"
+        name="reaction_time"
+        id="reaction_time"
+        class="form-control"
+        placeholder="np. 0.75"
+        required
+      />
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success btn-lg">
+        ✅ Dodaj wynik
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- ✅ JavaScript do ukrywania pól nowych zawodów i walidacji czasu -->
+<script>
+  function toggleNewCompetitionFields() {
+    let competitionSelect = document.getElementById("competition_id");
+    let newCompetitionFields = document.getElementById(
+      "new_competition_fields"
+    );
+
+    if (competitionSelect.value) {
+      newCompetitionFields.style.display = "none"; // Ukryj pola, jeśli wybrano istniejące zawody
+    } else {
+      newCompetitionFields.style.display = "block"; // Pokaż, jeśli nie wybrano zawodów
+    }
+  }
+
+  function validateTimeFormat() {
+    let timeInput = document.getElementById("time").value;
+    let timeRegex = /^(\d{1,2}:\d{2}\.\d{2}|\d{1,2}\.\d{2})$/; // MM:SS.SS lub SS.SS
+
+    if (!timeRegex.test(timeInput)) {
+      alert(
+        "Błąd: Czas musi być w formacie MM:SS.SS (np. 01:15.23) lub SS.SS (np. 45.67)"
+      );
+      return false;
+    }
+    return true;
+  }
+
+  // ✅ Ukrywamy pola dla nowych zawodów na start
+  document.addEventListener("DOMContentLoaded", function () {
+    toggleNewCompetitionFields();
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "profile.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4 text-white">
+    <i class="fas fa-chart-bar"></i> Statystyka opisowa dla dystansu {{ distance }} m {{ style_name }}
+  </h2>
+
+  <!-- Formularz wyboru roku -->
+  <form method="POST" class="row g-3 mb-4">
+    <div class="col-md-6 offset-md-3">
+      <label for="year" class="form-label"><i class="fas fa-calendar-alt"></i> Wybierz rok:</label>
+      <select name="year" id="year" class="form-select shadow-sm">
+        <option value="">-- Wszystkie lata --</option>
+        {% for year in available_years %}
+        <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>
+          {{ year }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12 text-center">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-search"></i> Pokaż statystyki
+      </button>
+    </div>
+  </form>
+
+  <!-- Wyświetlanie wyników -->
+  {% if stats %}
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">
+        <i class="fas fa-info-circle"></i> Statystyki dla dystansu 
+        <span class="text-white">{{ distance }} m</span> - 
+        <span class="text-white">{{ style_name }}</span>
+        {% if selected_year %} w roku {{ selected_year }}{% endif %}
+      </h4>
+    </div>
+    <div class="card-body">
+      <table class="table table-striped table-bordered text-center">
+        <thead class="table-primary">
+          <tr>
+            <th><i class="fas fa-trophy"></i> Wartość</th>
+            <th><i class="fas fa-globe"></i> Ogólna</th>
+            {% if selected_year %}
+            <th><i class="fas fa-calendar"></i> Rok {{ selected_year }}</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>🏅 Rekord życiowy (czas)</strong></td>
+            <td>{{ stats.best_time if stats.best_time else "Brak danych" }}</td>  <!-- Sformatowany czas -->
+            {% if selected_year %}
+            <td>{{ stats.best_year_time if stats.best_year_time else "Brak danych" }}</td>
+            {% endif %}
+          </tr>
+          <tr>
+            <td><strong>📊 Średni czas</strong></td>
+            <td>{{ stats.average_time if stats.average_time else "Brak danych" }}</td> <!-- Sformatowany czas -->
+            {% if selected_year %}
+            <td>{{ stats.average_year_time if stats.average_year_time else "Brak danych" }}</td> <!-- Sformatowany czas -->
+            {% endif %}
+          </tr>
+          <tr>
+            <td><strong>⏱️ Najlepsza reakcja startowa</strong></td>
+            <td>{{ stats.best_reaction if stats.best_reaction else "Brak danych" }}</td>
+            {% if selected_year %}
+            <td>{{ stats.best_year_reaction if stats.best_year_reaction else "Brak danych" }}</td>
+            {% endif %}
+          </tr>
+          <tr>
+            <td><strong>🏊‍♂️ Liczba startów</strong></td>
+            <td>{{ stats.total_starts }}</td>
+            {% if selected_year %}
+            <td>{{ stats.year_starts if stats.year_starts else "Brak danych" }}</td>
+            {% endif %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <p class="text-center text-danger mt-4">
+    <i class="fas fa-exclamation-triangle"></i>
+    {% if selected_year %}
+    Brak wyników dla wybranego roku.
+    {% else %}
+    Brak wyników dla tego dystansu.
+    {% endif %}
+  </p>
+  {% endif %}
+
+</div>
+{% endblock %}
