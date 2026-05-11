@@ -176,40 +176,40 @@
 #             # # **Admin (w osobnym klubie)**
 #             # User(
 #             #     id_user=1, user_name="Admin", last_name="Systemowy", gender="M",
-#             #     date_of_birth=date(1985, 1, 1), email_address="admin@admin.com",
-#             #     password_hash=hash_password("admin123"),
+#             #     date_of_birth=date(1985, 1, 1), email_address="admin@example.invalid",
+#             #     password_hash=hash_password("SwimDemo2026!"),
 #             #     id_role=1, club_id=1  # Klub Admin Club
 #             # ),
 #             # # **Trenerzy**
 #             # User(
 #             #     id_user=2, user_name="Jan", last_name="Kowalski", gender="M",
-#             #     date_of_birth=date(1978, 3, 14), email_address="j.kowalski1@wp.pl",
-#             #     password_hash=hash_password("kowalski123"),
+#             #     date_of_birth=date(1978, 3, 14), email_address="j.kowalski1@example.invalid",
+#             #     password_hash=hash_password("SwimDemo2026!"),
 #             #     id_role=2, club_id=2
 #             # ),
 #             # User(
 #             #     id_user=3, user_name="Anna", last_name="Nowak", gender="K",
-#             #     date_of_birth=date(1982, 7, 20), email_address="a.nowak@wp.pl",
-#             #     password_hash=hash_password("nowak123"),
+#             #     date_of_birth=date(1982, 7, 20), email_address="a.nowak@example.invalid",
+#             #     password_hash=hash_password("SwimDemo2026!"),
 #             #     id_role=2, club_id=3
 #             # ),
 #             # # **Zawodnicy**
 #             # User(
 #             #     id_user=4, user_name="Marek", last_name="Wiśniewski", gender="M",
-#             #     date_of_birth=date(2005, 6, 5), email_address="m.wisniewski@wp.pl",
-#             #     password_hash=hash_password("marek123"),
+#             #     date_of_birth=date(2005, 6, 5), email_address="m.wisniewski@example.invalid",
+#             #     password_hash=hash_password("SwimDemo2026!"),
 #             #     id_role=3, club_id=2
 #             # ),
 #             # User(
 #             #     id_user=5, user_name="Oliwia", last_name="Dąbrowska", gender="K",
-#             #     date_of_birth=date(2006, 2, 12), email_address="o.dabrowska@wp.pl",
-#             #     password_hash=hash_password("oliwia123"),
+#             #     date_of_birth=date(2006, 2, 12), email_address="o.dabrowska@example.invalid",
+#             #     password_hash=hash_password("SwimDemo2026!"),
 #             #     id_role=3, club_id=3
 #             # ),
 #             User(
 #                 id_user=7, user_name="Jakub", last_name="Nowak", gender="M",
-#                 date_of_birth=date(2007, 11, 28), email_address="j.nowak@wp.pl",
-#                 password_hash=hash_password("jakub123"),
+#                 date_of_birth=date(2007, 11, 28), email_address="j.nowak@example.invalid",
+#                 password_hash=hash_password("SwimDemo2026!"),
 #                 id_role=3, club_id=2
 #             ),
 #         ]
@@ -448,9 +448,9 @@ def seed():
 
         users = [
             User(
-                user_name="Jakub", last_name="Nowak", gender="M",
-                date_of_birth=date(2007, 11, 28), email_address="j.nowak@wp.pl",
-                password_hash=hash_password("jakub123"),
+                user_name="Marek", last_name="Markowski", gender="M",
+                date_of_birth=date(2007, 11, 28), email_address="marek.legacy@example.invalid",
+                password_hash=hash_password("SwimDemo2026!"),
                 id_role=3, club_id=2
             ),
         ]
@@ -458,7 +458,7 @@ def seed():
         db.session.commit()
 
         # Pobieranie nowo dodanego użytkownika
-        user = User.query.filter_by(email_address="j.nowak@wp.pl").first()
+        user = User.query.filter_by(email_address="marek.legacy@example.invalid").first()
         if not user:
             print("⚠️ Nie udało się dodać użytkownika!")
             return
@@ -497,4 +497,6 @@ def seed():
         print("✅ Dodano użytkownika, zawody i wyniki!")
 
 if __name__ == "__main__":
+    print("Uwaga: ten skrypt dodaje pojedynczego testowego użytkownika (legacy).")
+    print("Do publicznego zestawu kont demo użyj:  python seed_public_demo.py --force")
     seed()

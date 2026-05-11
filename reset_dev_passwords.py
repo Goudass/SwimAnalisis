@@ -7,6 +7,8 @@ Uruchom z katalogu projektu:
 
 Opcjonalnie własne hasło (min. 6 znaków — wymóg formularza logowania):
   SWIM_DEV_PASSWORD='TwojeHaslo!' python reset_dev_passwords.py
+
+Domyślne hasło zgodne z README / seed_public_demo: SwimDemo2026!
 """
 import os
 
@@ -17,7 +19,7 @@ from app.models import User
 
 
 def main() -> None:
-    new_password = os.environ.get("SWIM_DEV_PASSWORD", "SwimAnaliza2026!")
+    new_password = os.environ.get("SWIM_DEV_PASSWORD", "SwimDemo2026!")
     if len(new_password) < 6:
         print("Hasło musi mieć co najmniej 6 znaków.")
         raise SystemExit(1)

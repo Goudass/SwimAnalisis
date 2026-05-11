@@ -239,6 +239,49 @@ Tryb **`debug=True`** jest przeznaczony **tylko do developmentu** — nie używa
 
 ---
 
+## Publiczne repo — dane demonstracyjne (fikcyjne maile i jedno hasło)
+
+W repozytorium **nie ma** prawdziwych danych osobowych. Do pokazu rekruterom / szybkiego startu lokalnie:
+
+### Hasło testowe (wszystkie konta demo)
+
+**`SwimDemo2026!`**
+
+Po załadowaniu bazy demo każdy użytkownik ma to samo hasło (algorytm hash w bazie). Możesz je ponownie ustawić dla **wszystkich** kont w `app.db`:
+
+```bash
+python reset_dev_passwords.py
+```
+
+(opcjonalnie: `SWIM_DEV_PASSWORD='InneHaslo!' python reset_dev_passwords.py`)
+
+### Konta logowania (e-mail → rola)
+
+| E-mail (login) | Rola |
+|----------------|------|
+| `admin.demo@swimanalisis.invalid` | Admin |
+| `trener.demo@swimanalisis.invalid` | Trener |
+| `zawodnik.demo@swimanalisis.invalid` | Zawodnik (ma przykładowe wyniki z zawodów) |
+| `zawodnik2.demo@swimanalisis.invalid` | Zawodnik |
+
+Domena **`.invalid`** jest zarezerwowana (RFC 2606) — nie wyśle się na nią prawdziwy mail.
+
+### Jak zbudować / nadpisać bazę demo
+
+**Uwaga:** poniższa komenda **usuwa** obecnych użytkowników, wyniki, zawody, kluby oraz wpisy **dziennika treningowego** w `app.db` i wstawia zestaw fikcyjny.
+
+```bash
+cd SwimAnalisis   # katalog projektu
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+export FLASK_APP=run.py            # Windows: set FLASK_APP=run.py
+flask db upgrade                   # jeśli tabele jeszcze nie istnieją
+python seed_public_demo.py --force
+```
+
+Skrypt: `seed_public_demo.py` (w katalogu głównym). Bez flagi `--force`, jeśli w bazie są już użytkownicy, skrypt **nic nie zmieni** (trzeba świadomie podać `--force`).
+
+---
+
 ## Struktura katalogów (ważniejsze elementy)
 
 ```
@@ -247,6 +290,8 @@ SwimAnalisis/
 ├── requirements.txt       # Zależności pip
 ├── .env.example           # Wzorzec zmiennych (bez sekretów)
 ├── LICENSE                # Licencja MIT
+├── seed_public_demo.py    # Pełny zestaw kont i danych demo (fikcyjne maile)
+├── reset_dev_passwords.py # Ustawia to samo hasło dla wszystkich użytkowników w app.db
 ├── app/
 │   ├── __init__.py        # Inicjalizacja Flask, db, migracje, import tras
 │   ├── models.py          # Modele SQLAlchemy (m.in. User, Result, TrainingSession, …)
