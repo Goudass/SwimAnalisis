@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="container">
 <div class="mb-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb small">
@@ -40,5 +41,6 @@
       <a href="{{ url_for('training_session_detail', session_id=session.id_session) }}" class="btn btn-outline-secondary">Wróć</a>
     </div>
   </form>
+</div>
 </div>
 {% endblock %}

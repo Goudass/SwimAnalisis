@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="container">
 <nav aria-label="breadcrumb" class="mb-3">
   <ol class="breadcrumb small mb-0">
     <li class="breadcrumb-item"><a href="{{ url_for('training_list') }}">Dziennik treningowy</a></li>
@@ -52,7 +53,7 @@
       <span><i class="fa-solid fa-stopwatch me-2"></i>{{ b.title }}</span>
       {% if can_edit %}
         <form method="POST" action="{{ url_for('training_block_delete', block_id=b.id_block) }}" class="mb-0" onsubmit="return confirm('Usunąć tę serię i wszystkie powtórzenia?');">
-          <button type="submit" class="btn btn-sm btn-outline-light border-0 text-white-50" style="text-decoration: underline">Usuń serię</button>
+          <button type="submit" class="btn btn-link btn-sm text-danger text-decoration-none p-0">Usuń serię</button>
         </form>
       {% endif %}
     </div>
@@ -77,7 +78,7 @@
           <tbody>
             {% for rep in reps %}
               <tr>
-                <td class="fw-bold text-primary">{{ rep.rep_index }}</td>
+                <td class="fw-bold sa-rep-index">{{ rep.rep_index }}</td>
                 <td>
                   <input
                     type="text"
@@ -154,4 +155,5 @@
     {% endif %}
   </div>
 {% endfor %}
+</div>
 {% endblock %}

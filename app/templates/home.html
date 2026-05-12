@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="container-fluid px-0 px-lg-1" style="max-width: 1200px; margin: 0 auto">
+<div class="container-fluid px-0 px-lg-2 sa-home-fluid">
   {% if current_user.is_authenticated %}
     <div class="mb-4">
       <h1 class="sa-page-title mb-1">Cześć, {{ current_user.user_name }}.</h1>

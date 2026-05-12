@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a4a6e" />
+    <meta name="theme-color" content="#0f172a" />
     <title>{% if title %}{{ title }} | {% endif %}SwimAnalisis</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -32,168 +32,191 @@
   </head>
 
   <body class="sa-app">
-    <div class="sa-shell d-flex">
-      <aside class="sa-sidebar">
-        <a class="sa-brand" href="{{ url_for('index') }}">
-          <span class="sa-brand-mark" aria-hidden="true">
-            <i class="fa-solid fa-person-swimming"></i>
-          </span>
-          <span class="sa-brand-text">
-            <span class="sa-brand-title">SwimAnalisis</span>
-            <span class="sa-brand-tag">Wyniki · Analiza · Progres</span>
-          </span>
-        </a>
+    <div class="sa-shell d-flex flex-column flex-lg-row min-vh-100">
+      <aside
+        class="offcanvas offcanvas-start offcanvas-lg sa-sidebar"
+        tabindex="-1"
+        id="saSidebarNav"
+        aria-labelledby="saSidebarNavLabel"
+      >
+        <div class="offcanvas-header sa-sidebar-header-mobile d-lg-none">
+          <span class="offcanvas-title text-white fw-semibold" id="saSidebarNavLabel">Menu</span>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Zamknij menu"></button>
+        </div>
+        <div class="offcanvas-body flex-grow-1">
+          <a class="sa-brand" href="{{ url_for('index') }}">
+            <span class="sa-brand-mark" aria-hidden="true">
+              <i class="fa-solid fa-person-swimming"></i>
+            </span>
+            <span class="sa-brand-text">
+              <span class="sa-brand-title">SwimAnalisis</span>
+              <span class="sa-brand-tag">performance</span>
+            </span>
+          </a>
 
-        <ul class="sa-nav">
-          <li>
-            <a
-              class="sa-nav-link {% if request.endpoint == 'index' %}is-active{% endif %}"
-              href="{{ url_for('index') }}"
-            >
-              <i class="fa-solid fa-house"></i> Strona główna
-            </a>
-          </li>
-
-          {% if not current_user.is_authenticated %}
+          <p class="sa-nav-section-label">Nawigacja</p>
+          <ul class="sa-nav">
             <li>
               <a
-                class="sa-nav-link {% if request.endpoint == 'login' %}is-active{% endif %}"
-                href="{{ url_for('login') }}"
+                class="sa-nav-link {% if request.endpoint == 'index' %}is-active{% endif %}"
+                href="{{ url_for('index') }}"
               >
-                <i class="fa-solid fa-right-to-bracket"></i> Logowanie
+                <i class="fa-solid fa-house"></i> Start
               </a>
             </li>
-            <li>
-              <a
-                class="sa-nav-link {% if request.endpoint == 'register' %}is-active{% endif %}"
-                href="{{ url_for('register') }}"
-              >
-                <i class="fa-solid fa-user-plus"></i> Rejestracja
-              </a>
-            </li>
-          {% endif %}
 
-          {% if current_user.is_authenticated %}
-            {% if current_user.role.role_name == "Admin" %}
+            {% if not current_user.is_authenticated %}
               <li>
                 <a
-                  class="sa-nav-link {% if request.endpoint == 'training_list' or request.endpoint == 'training_new' or request.endpoint == 'training_session_detail' or request.endpoint == 'training_block_new' %}is-active{% endif %}"
-                  href="{{ url_for('training_list') }}"
+                  class="sa-nav-link {% if request.endpoint == 'login' %}is-active{% endif %}"
+                  href="{{ url_for('login') }}"
                 >
-                  <i class="fa-solid fa-book"></i> Dziennik treningowy
+                  <i class="fa-solid fa-right-to-bracket"></i> Logowanie
                 </a>
               </li>
               <li>
                 <a
-                  class="sa-nav-link {% if request.endpoint == 'manage_users' %}is-active{% endif %}"
-                  href="{{ url_for('manage_users') }}"
+                  class="sa-nav-link {% if request.endpoint == 'register' %}is-active{% endif %}"
+                  href="{{ url_for('register') }}"
                 >
-                  <i class="fa-solid fa-users-gear"></i> Użytkownicy
-                </a>
-              </li>
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'manage_clubs' %}is-active{% endif %}"
-                  href="{{ url_for('manage_clubs') }}"
-                >
-                  <i class="fa-solid fa-building"></i> Kluby
-                </a>
-              </li>
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'manage_competitions' %}is-active{% endif %}"
-                  href="{{ url_for('manage_competitions') }}"
-                >
-                  <i class="fa-solid fa-calendar-days"></i> Zawody
-                </a>
-              </li>
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'manage_results' %}is-active{% endif %}"
-                  href="{{ url_for('manage_results') }}"
-                >
-                  <i class="fa-solid fa-stopwatch"></i> Wyniki
-                </a>
-              </li>
-            {% elif current_user.role.role_name == "Trener" %}
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'training_list' or request.endpoint == 'training_new' or request.endpoint == 'training_session_detail' or request.endpoint == 'training_block_new' %}is-active{% endif %}"
-                  href="{{ url_for('training_list') }}"
-                >
-                  <i class="fa-solid fa-book"></i> Dziennik treningowy
-                </a>
-              </li>
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'club_athletes' %}is-active{% endif %}"
-                  href="{{ url_for('club_athletes', user_id=current_user.id_user) }}"
-                >
-                  <i class="fa-solid fa-people-group"></i> Zawodnicy
-                </a>
-              </li>
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'compare_athletes' %}is-active{% endif %}"
-                  href="{{ url_for('compare_athletes') }}"
-                >
-                  <i class="fa-solid fa-code-compare"></i> Porównania
-                </a>
-              </li>
-              <li>
-                <a
-                  class="sa-nav-link sa-nav-link--accent {% if request.endpoint == 'add_result' %}is-active{% endif %}"
-                  href="{{ url_for('add_result') }}"
-                >
-                  <i class="fa-solid fa-circle-plus"></i> Dodaj wynik
-                </a>
-              </li>
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'club_competitions' %}is-active{% endif %}"
-                  href="{{ url_for('club_competitions') }}"
-                >
-                  <i class="fa-solid fa-list-check"></i> Zawody klubu
-                </a>
-              </li>
-            {% elif current_user.role.role_name == "Zawodnik" %}
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'training_list' or request.endpoint == 'training_new' or request.endpoint == 'training_session_detail' or request.endpoint == 'training_block_new' %}is-active{% endif %}"
-                  href="{{ url_for('training_list') }}"
-                >
-                  <i class="fa-solid fa-book"></i> Dziennik treningowy
-                </a>
-              </li>
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'personal_bests' %}is-active{% endif %}"
-                  href="{{ url_for('personal_bests', user_id=current_user.id_user) }}"
-                >
-                  <i class="fa-solid fa-trophy"></i> Rekordy życiowe
-                </a>
-              </li>
-              <li>
-                <a
-                  class="sa-nav-link {% if request.endpoint == 'competitions' %}is-active{% endif %}"
-                  href="{{ url_for('competitions', user_id=current_user.id_user) }}"
-                >
-                  <i class="fa-solid fa-calendar-days"></i> Twoje zawody
+                  <i class="fa-solid fa-user-plus"></i> Rejestracja
                 </a>
               </li>
             {% endif %}
-          {% endif %}
-        </ul>
+
+            {% if current_user.is_authenticated %}
+              {% if current_user.role.role_name == "Admin" %}
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint in ['training_list', 'training_new', 'training_session_detail', 'training_block_new', 'training_save_reps', 'training_block_delete', 'training_session_delete'] %}is-active{% endif %}"
+                    href="{{ url_for('training_list') }}"
+                  >
+                    <i class="fa-solid fa-book"></i> Dziennik treningowy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint == 'manage_users' %}is-active{% endif %}"
+                    href="{{ url_for('manage_users') }}"
+                  >
+                    <i class="fa-solid fa-users-gear"></i> Użytkownicy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint == 'manage_clubs' %}is-active{% endif %}"
+                    href="{{ url_for('manage_clubs') }}"
+                  >
+                    <i class="fa-solid fa-building"></i> Kluby
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint == 'manage_competitions' %}is-active{% endif %}"
+                    href="{{ url_for('manage_competitions') }}"
+                  >
+                    <i class="fa-solid fa-calendar-days"></i> Zawody
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint == 'manage_results' %}is-active{% endif %}"
+                    href="{{ url_for('manage_results') }}"
+                  >
+                    <i class="fa-solid fa-stopwatch"></i> Wyniki
+                  </a>
+                </li>
+              {% elif current_user.role.role_name == "Trener" %}
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint in ['training_list', 'training_new', 'training_session_detail', 'training_block_new', 'training_save_reps', 'training_block_delete', 'training_session_delete'] %}is-active{% endif %}"
+                    href="{{ url_for('training_list') }}"
+                  >
+                    <i class="fa-solid fa-book"></i> Dziennik treningowy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint == 'club_athletes' %}is-active{% endif %}"
+                    href="{{ url_for('club_athletes', user_id=current_user.id_user) }}"
+                  >
+                    <i class="fa-solid fa-people-group"></i> Zawodnicy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint == 'compare_athletes' %}is-active{% endif %}"
+                    href="{{ url_for('compare_athletes') }}"
+                  >
+                    <i class="fa-solid fa-code-compare"></i> Porównania
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link sa-nav-link--accent {% if request.endpoint == 'add_result' %}is-active{% endif %}"
+                    href="{{ url_for('add_result') }}"
+                  >
+                    <i class="fa-solid fa-circle-plus"></i> Dodaj wynik
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint == 'club_competitions' %}is-active{% endif %}"
+                    href="{{ url_for('club_competitions') }}"
+                  >
+                    <i class="fa-solid fa-list-check"></i> Zawody klubu
+                  </a>
+                </li>
+              {% elif current_user.role.role_name == "Zawodnik" %}
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint in ['training_list', 'training_new', 'training_session_detail', 'training_block_new', 'training_save_reps', 'training_block_delete', 'training_session_delete'] %}is-active{% endif %}"
+                    href="{{ url_for('training_list') }}"
+                  >
+                    <i class="fa-solid fa-book"></i> Dziennik treningowy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint == 'personal_bests' %}is-active{% endif %}"
+                    href="{{ url_for('personal_bests', user_id=current_user.id_user) }}"
+                  >
+                    <i class="fa-solid fa-trophy"></i> Rekordy życiowe
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="sa-nav-link {% if request.endpoint == 'competitions' %}is-active{% endif %}"
+                    href="{{ url_for('competitions', user_id=current_user.id_user) }}"
+                  >
+                    <i class="fa-solid fa-calendar-days"></i> Twoje zawody
+                  </a>
+                </li>
+              {% endif %}
+            {% endif %}
+          </ul>
+        </div>
       </aside>
 
-      <div class="sa-main-wrap flex-grow-1 d-flex flex-column min-vh-100">
+      <div class="sa-main-wrap flex-grow-1 d-flex flex-column min-vh-100 min-w-0">
         <header class="sa-topbar">
-          <p class="sa-topbar-title mb-0 d-none d-sm-block">Panel</p>
-          <div class="d-flex align-items-center gap-2 ms-auto">
+          <div class="sa-topbar-inner">
+            <button
+              class="btn sa-btn-menu d-lg-none"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#saSidebarNav"
+              aria-controls="saSidebarNav"
+            >
+              <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+            <p class="sa-topbar-title mb-0 text-truncate">SwimAnalisis</p>
+          </div>
+          <div class="d-flex align-items-center gap-2 flex-shrink-0">
             {% if current_user.is_authenticated %}
               <div class="dropdown">
                 <a
-                  class="nav-link dropdown-toggle d-flex align-items-center gap-2 py-1 text-dark"
+                  class="nav-link dropdown-toggle d-flex align-items-center gap-2 py-1 px-2 rounded-2 text-dark"
                   href="#"
                   id="userMenu"
                   role="button"
@@ -207,23 +230,23 @@
                     height="36"
                     alt=""
                   />
-                  <span class="fw-semibold d-none d-md-inline">{{ current_user.user_name }}</span>
+                  <span class="fw-semibold d-none d-md-inline small">{{ current_user.user_name }}</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="min-width: 220px">
+                <ul class="dropdown-menu dropdown-menu-end py-2" style="min-width: 220px">
                   <li>
-                    <a class="dropdown-item py-2" href="{{ url_for('profile', user_id=current_user.id_user) }}">
-                      <i class="fa-regular fa-id-card me-2 text-primary"></i> Profil
+                    <a class="dropdown-item py-2 rounded-1" href="{{ url_for('profile', user_id=current_user.id_user) }}">
+                      <i class="fa-regular fa-id-card me-2" style="color: var(--sa-accent)"></i> Profil
                     </a>
                   </li>
                   <li>
-                    <a class="dropdown-item py-2" href="{{ url_for('edit_profile', user_id=current_user.id_user) }}">
+                    <a class="dropdown-item py-2 rounded-1" href="{{ url_for('edit_profile', user_id=current_user.id_user) }}">
                       <i class="fa-solid fa-pen me-2 text-secondary"></i> Edytuj profil
                     </a>
                   </li>
-                  <li><hr class="dropdown-divider" /></li>
+                  <li><hr class="dropdown-divider my-2" /></li>
                   <li>
                     <form method="POST" action="{{ url_for('logout') }}" class="px-1">
-                      <button type="submit" class="dropdown-item py-2 text-danger">
+                      <button type="submit" class="dropdown-item py-2 text-danger rounded-1">
                         <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Wyloguj
                       </button>
                     </form>
@@ -239,10 +262,10 @@
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            <div class="container-fluid px-3 px-lg-4 mt-3">
+            <div class="container-fluid px-3 px-lg-4 mt-3" style="max-width: 1080px; margin-inline: auto">
               {% for category, message in messages %}
                 <div
-                  class="alert alert-{{ category }} alert-dismissible fade show shadow-sm border-0"
+                  class="alert alert-{{ category }} alert-dismissible fade show border-0 small"
                   role="alert"
                 >
                   {{ message }}
@@ -255,8 +278,8 @@
 
         <main class="sa-main flex-grow-1">{% block content %}{% endblock %}</main>
 
-        <footer class="sa-footer px-4 py-3 text-center text-md-start">
-          <span class="text-muted small">SwimAnalisis — narzędzie do wyników i progresji pływackiej.</span>
+        <footer class="sa-footer px-3 px-md-4 py-3 text-center text-md-start">
+          <span class="text-muted">SwimAnalisis — wyniki, trening, progresja.</span>
         </footer>
       </div>
     </div>
@@ -266,5 +289,18 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script>
+      (function () {
+        var nav = document.getElementById("saSidebarNav");
+        if (!nav || !window.bootstrap) return;
+        nav.querySelectorAll(".sa-nav-link").forEach(function (a) {
+          a.addEventListener("click", function () {
+            if (window.innerWidth >= 992) return;
+            var inst = bootstrap.Offcanvas.getInstance(nav);
+            if (inst) inst.hide();
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
